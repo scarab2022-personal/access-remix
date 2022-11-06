@@ -20,6 +20,47 @@
 - pnpm add -D @types/lodash
 - pnpm add zod
 - pnpm add clsx
+- pnpm add -D supabase
+- pnpm supabase init
+- pnpm add @supabase/supabase-js
+- pnpm install @supabase/auth-helpers-remix
+- pnpm add -D @pgtyped/cli @pgtyped/query
+- pnpm add pg
+- pnpm add -D @types/pg
+
+## Supabase CLI
+
+[Install via NPM](https://github.com/supabase/cli),
+[Supabase Local Development](https://supabase.com/docs/guides/cli/local-development)
+
+- pnpm add -D supabase
+- pnpm supabase -h
+- pnpm supabase login
+- pnpm supabase init
+- pnpm supabase start | stop | status
+- pnpm supabase db diff --use-migra --file [file_name]
+- pnpm supabase db reset --debug
+- pnpm supabase db branch create | delete | list | switch
+- pnpm supabase link -p [db password] --project-ref [string]
+- pnpm supabase db push -p [db password]
+- pnpm supabase migrations list
+- psql: \i supabase/seed.sql
+- pnpm supabase gen types typescript --local > DatabaseDefinitions.ts
+- psql postgresql://postgres:postgres@localhost:54322/postgres
+
+## Reset Prod DB (hacky and risky)
+
+- drop schema public cascade;
+- create schema public;
+- truncate supabase_migrations.schema_migrations;
+- truncate auth.users cascade;
+- truncate auth.schema_migrations;
+- \i supabase/seed.sql
+
+## pgtyped
+
+- pnpm exec pgtyped -w -c pgtyped.json
+- psql postgresql://postgres:postgres@localhost:54322/postgres
 
 # Welcome to Remix!
 
