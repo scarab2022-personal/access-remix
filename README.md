@@ -10,7 +10,16 @@
 - tailwind.congif.js
 - root.tsx: import tailwindStylesheetUrl from "./styles/tailwind.css";
 - pnpm add -D npm-run-all
-- pnpm add -D esbuild
+- pnpm add -D @tailwindcss/forms
+- tailwind.config.js plugins: require('@tailwindcss/forms')
+- pnpm add -D @tailwindcss/typography
+- tailwind.config.js plugins: require('@tailwindcss/typography')
+- pnpm add @headlessui/react
+- pnpm add @heroicons/react
+- pnpm add lodash
+- pnpm add -D @types/lodash
+- pnpm add zod
+- pnpm add clsx
 
 # Welcome to Remix!
 

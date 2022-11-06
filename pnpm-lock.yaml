@@ -1,18 +1,25 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@headlessui/react': 1.7.4
+  '@heroicons/react': 2.0.13
   '@remix-run/dev': ^1.7.5
   '@remix-run/eslint-config': ^1.7.5
   '@remix-run/node': ^1.7.5
   '@remix-run/react': ^1.7.5
   '@remix-run/serve': ^1.7.5
   '@remix-run/vercel': ^1.7.5
+  '@tailwindcss/forms': 0.5.3
+  '@tailwindcss/typography': 0.5.7
+  '@types/lodash': 4.14.188
   '@types/node': 18.11.9
   '@types/react': ^18.0.15
   '@types/react-dom': ^18.0.6
   '@vercel/node': ^2.4.4
+  clsx: 1.2.1
   eslint: ^8.26.0
   eslint-config-prettier: 8.5.0
+  lodash: 4.17.21
   npm-run-all: 4.1.5
   prettier: 2.7.1
   prettier-plugin-tailwindcss: 0.1.13
@@ -20,19 +27,28 @@ specifiers:
   react-dom: ^18.2.0
   tailwindcss: 3.2.2
   typescript: ^4.8.4
+  zod: 3.19.1
 
 dependencies:
+  '@headlessui/react': 1.7.4_biqbaboplfbrettd7655fr4n2y
+  '@heroicons/react': 2.0.13_react@18.2.0
   '@remix-run/node': 1.7.5_biqbaboplfbrettd7655fr4n2y
   '@remix-run/react': 1.7.5_biqbaboplfbrettd7655fr4n2y
   '@remix-run/vercel': 1.7.5_uspv5w5x6u4idne7yx3yucoeei
   '@vercel/node': 2.6.1
+  clsx: 1.2.1
+  lodash: 4.17.21
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  zod: 3.19.1
 
 devDependencies:
   '@remix-run/dev': 1.7.5_67odqug3q6zvwws4422s5yrks4
   '@remix-run/eslint-config': 1.7.5_lmezopescv3nnfjcfgbaewnf6i
   '@remix-run/serve': 1.7.5_biqbaboplfbrettd7655fr4n2y
+  '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.2
+  '@tailwindcss/typography': 0.5.7_tailwindcss@3.2.2
+  '@types/lodash': 4.14.188
   '@types/node': 18.11.9
   '@types/react': 18.0.25
   '@types/react-dom': 18.0.8
@@ -1412,6 +1428,26 @@ packages:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
     dev: true
 
+  /@headlessui/react/1.7.4_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-D8n5yGCF3WIkPsjEYeM8knn9jQ70bigGGb5aUvN6y4BGxcT3OcOQOKcM3zRGllRCZCFxCZyQvYJF6ZE7bQUOyQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16 || ^17 || ^18
+      react-dom: ^16 || ^17 || ^18
+    dependencies:
+      client-only: 0.0.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@heroicons/react/2.0.13_react@18.2.0:
+    resolution: {integrity: sha512-iSN5XwmagrnirWlYEWNPdCDj9aRYVD/lnK3JlsC9/+fqGF80k8C7rl+1HCvBX0dBoagKqOFBs6fMhJJ1hOg1EQ==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /@humanwhocodes/config-array/0.11.7:
     resolution: {integrity: sha512-kBbPWzN8oVMLb0hOUYXhmxggL/1cJE6ydvjDIGi9EnAGUyA7cLVKQg+d/Dsm+KZwx2czGHrCmMVLiyg8s5JPKw==}
     engines: {node: '>=10.10.0'}
@@ -1770,6 +1806,27 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
+  /@tailwindcss/forms/0.5.3_tailwindcss@3.2.2:
+    resolution: {integrity: sha512-y5mb86JUoiUgBjY/o6FJSFZSEttfb3Q5gllE4xoKjAAD+vBrnIhE4dViwUuow3va8mpH4s9jyUbUbrRGoRdc2Q==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
+    dependencies:
+      mini-svg-data-uri: 1.4.4
+      tailwindcss: 3.2.2
+    dev: true
+
+  /@tailwindcss/typography/0.5.7_tailwindcss@3.2.2:
+    resolution: {integrity: sha512-JTTSTrgZfp6Ki4svhPA4mkd9nmQ/j9EfE7SbHJ1cLtthKkpW2OxsFXzSmxbhYbEkfNIyAyhle5p4SYyKRbz/jg==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || insiders'
+    dependencies:
+      lodash.castarray: 4.4.0
+      lodash.isplainobject: 4.0.6
+      lodash.merge: 4.6.2
+      postcss-selector-parser: 6.0.10
+      tailwindcss: 3.2.2
+    dev: true
+
   /@testing-library/dom/8.19.0:
     resolution: {integrity: sha512-6YWYPPpxG3e/xOo6HIWwB/58HukkwIVTOaZ0VwdMVjhRUX/01E4FtQbck9GazOOj7MXHc5RBzMrU86iBJHbI+A==}
     engines: {node: '>=12'}
@@ -1871,6 +1928,10 @@ packages:
     deprecated: This is a stub types definition. keyv provides its own type definitions, so you do not need this installed.
     dependencies:
       keyv: 4.5.0
+    dev: true
+
+  /@types/lodash/4.14.188:
+    resolution: {integrity: sha512-zmEmF5OIM3rb7SbLCFYoQhO4dGt2FRM9AMkxvA3LaADOF1n8in/zGJlWji9fmafLoNyz+FoL6FE0SLtGIArD7w==}
     dev: true
 
   /@types/mdast/3.0.10:
@@ -2728,6 +2789,10 @@ packages:
     engines: {node: '>= 10'}
     dev: true
 
+  /client-only/0.0.1:
+    resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+    dev: false
+
   /clone-deep/4.0.1:
     resolution: {integrity: sha512-neHB9xuzh/wk0dIHweyAXv2aPGZIVk3pLMe+/RNzINf17fe0OG96QroktYAUm7SM1PBnzTabaLboqqxDyMU+SQ==}
     engines: {node: '>=6'}
@@ -2747,6 +2812,11 @@ packages:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
     dev: true
+
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
+    dev: false
 
   /code-block-writer/10.1.1:
     resolution: {integrity: sha512-67ueh2IRGst/51p0n6FvPrnRjAGHY5F8xdjkgrYE7DDzpJe6qA07RYQ9VcoUeo5ATOjSOiWpSL3SWBRRbempMw==}
@@ -5475,8 +5545,16 @@ packages:
       p-locate: 5.0.0
     dev: true
 
+  /lodash.castarray/4.4.0:
+    resolution: {integrity: sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==}
+    dev: true
+
   /lodash.debounce/4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: true
+
+  /lodash.isplainobject/4.0.6:
+    resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
     dev: true
 
   /lodash.merge/4.6.2:
@@ -5485,7 +5563,6 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /log-symbols/4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
@@ -6026,6 +6103,11 @@ packages:
   /mimic-response/3.1.0:
     resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
     engines: {node: '>=10'}
+    dev: true
+
+  /mini-svg-data-uri/1.4.4:
+    resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
+    hasBin: true
     dev: true
 
   /minimatch/3.1.2:
@@ -8344,6 +8426,10 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod/3.19.1:
+    resolution: {integrity: sha512-LYjZsEDhCdYET9ikFu6dVPGp2YH9DegXjdJToSzD9rO6fy4qiRYFoyEYwps88OseJlPyl2NOe2iJuhEhL7IpEA==}
+    dev: false
 
   /zwitch/2.0.2:
     resolution: {integrity: sha512-JZxotl7SxAJH0j7dN4pxsTV6ZLXoLdGME+PsjkL/DaBrVryK9kTGq06GfKrwcSOqypP+fdXGoCHE36b99fWVoA==}

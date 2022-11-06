@@ -20,17 +20,25 @@
     "/public/build"
   ],
   "dependencies": {
+    "@headlessui/react": "1.7.4",
+    "@heroicons/react": "2.0.13",
     "@remix-run/node": "^1.7.5",
     "@remix-run/react": "^1.7.5",
     "@remix-run/vercel": "^1.7.5",
     "@vercel/node": "^2.4.4",
+    "clsx": "1.2.1",
+    "lodash": "4.17.21",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "zod": "3.19.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.7.5",
     "@remix-run/eslint-config": "^1.7.5",
     "@remix-run/serve": "^1.7.5",
+    "@tailwindcss/forms": "0.5.3",
+    "@tailwindcss/typography": "0.5.7",
+    "@types/lodash": "4.14.188",
     "@types/node": "18.11.9",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
