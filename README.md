@@ -4,6 +4,13 @@
 - package.json: prettier, eslintIgnore
 - pnpm add -D prettier prettier-plugin-tailwindcss eslint-config-prettier
 - .gitignore: tailwind
+- pnpm add -D @types/node
+- pnpm add -D tailwindcss
+- pnpm exec tailwindcss init
+- tailwind.congif.js
+- root.tsx: import tailwindStylesheetUrl from "./styles/tailwind.css";
+- pnpm add -D npm-run-all
+- pnpm add -D esbuild
 
 # Welcome to Remix!
 

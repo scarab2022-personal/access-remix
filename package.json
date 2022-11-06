@@ -2,8 +2,13 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
-    "build": "remix build",
-    "dev": "remix dev",
+    "build": "run-s build:*",
+    "build:css": "pnpm generate:css -- --minify",
+    "build:remix": "remix build",
+    "dev": "run-p dev:*",
+    "dev:css": "pnpm generate:css --watch",
+    "dev:remix": "remix dev",
+    "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
     "typecheck": "tsc -b"
   },
   "prettier": {},
@@ -24,12 +29,15 @@
     "@remix-run/dev": "^1.7.5",
     "@remix-run/eslint-config": "^1.7.5",
     "@remix-run/serve": "^1.7.5",
+    "@types/node": "18.11.9",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "8.5.0",
+    "npm-run-all": "4.1.5",
     "prettier": "2.7.1",
     "prettier-plugin-tailwindcss": "0.1.13",
+    "tailwindcss": "3.2.2",
     "typescript": "^4.8.4"
   },
   "engines": {
