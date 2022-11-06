@@ -1,4 +1,4 @@
-/** Types generated for queries found in "db/get_customer.sql" */
+/** Types generated for queries found in "app/db/get_customer.sql" */
 import { PreparedQuery } from '@pgtyped/query';
 
 /** 'GetCustomer' parameters type */

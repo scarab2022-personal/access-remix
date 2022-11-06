@@ -1,4 +1,4 @@
-/** Types generated for queries found in "db/get_access_users_by_point.sql" */
+/** Types generated for queries found in "app/db/get_access_users_by_point.sql" */
 import { PreparedQuery } from '@pgtyped/query';
 
 /** 'GetAccessUsersByPoint' parameters type */

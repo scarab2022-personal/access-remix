@@ -1,4 +1,4 @@
-/** Types generated for queries found in "db/get_access_users.sql" */
+/** Types generated for queries found in "app/db/get_access_users.sql" */
 import { PreparedQuery } from '@pgtyped/query';
 
 /** 'GetAccessUsers' parameters type */

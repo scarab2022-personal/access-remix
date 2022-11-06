@@ -1,4 +1,4 @@
-/** Types generated for queries found in "db/get_access_hub.sql" */
+/** Types generated for queries found in "app/db/get_access_hub.sql" */
 import { PreparedQuery } from '@pgtyped/query';
 
 /** 'GetAccessHub' parameters type */
