@@ -10,10 +10,13 @@ specifiers:
   '@types/react': ^18.0.15
   '@types/react-dom': ^18.0.6
   '@vercel/node': ^2.4.4
-  eslint: ^8.23.1
+  eslint: ^8.26.0
+  eslint-config-prettier: 8.5.0
+  prettier: 2.7.1
+  prettier-plugin-tailwindcss: 0.1.13
   react: ^18.2.0
   react-dom: ^18.2.0
-  typescript: ^4.7.4
+  typescript: ^4.8.4
 
 dependencies:
   '@remix-run/node': 1.7.5_biqbaboplfbrettd7655fr4n2y
@@ -30,6 +33,9 @@ devDependencies:
   '@types/react': 18.0.25
   '@types/react-dom': 18.0.8
   eslint: 8.26.0
+  eslint-config-prettier: 8.5.0_eslint@8.26.0
+  prettier: 2.7.1
+  prettier-plugin-tailwindcss: 0.1.13_prettier@2.7.1
   typescript: 4.8.4
 
 packages:
@@ -3638,6 +3644,15 @@ packages:
       source-map: 0.6.1
     dev: true
 
+  /eslint-config-prettier/8.5.0_eslint@8.26.0:
+    resolution: {integrity: sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==}
+    hasBin: true
+    peerDependencies:
+      eslint: '>=7.0.0'
+    dependencies:
+      eslint: 8.26.0
+    dev: true
+
   /eslint-import-resolver-node/0.3.6:
     resolution: {integrity: sha512-0En0w03NRVMn9Uiyn8YRPDKvWjxCWkslUEhGNTdGx15RvPJYQ+lbOlqrlNI2vEAs4pDYK4f/HN2TbDmk5TP0iw==}
     dependencies:
@@ -6455,6 +6470,15 @@ packages:
   /prelude-ls/1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
+    dev: true
+
+  /prettier-plugin-tailwindcss/0.1.13_prettier@2.7.1:
+    resolution: {integrity: sha512-/EKQURUrxLu66CMUg4+1LwGdxnz8of7IDvrSLqEtDqhLH61SAlNNUSr90UTvZaemujgl3OH/VHg+fyGltrNixw==}
+    engines: {node: '>=12.17.0'}
+    peerDependencies:
+      prettier: '>=2.2.0'
+    dependencies:
+      prettier: 2.7.1
     dev: true
 
   /prettier/2.7.1:

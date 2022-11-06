@@ -1,3 +1,10 @@
+## Dev Setup
+
+- .eslintrc.js: prettier
+- package.json: prettier, eslintIgnore
+- pnpm add -D prettier prettier-plugin-tailwindcss eslint-config-prettier
+- .gitignore: tailwind
+
 # Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
