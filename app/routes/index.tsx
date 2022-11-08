@@ -1,32 +1,35 @@
+import type { LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
+import { createServerClient } from "@supabase/auth-helpers-remix";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const response = new Response();
+  const supabaseClient = createServerClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
+    { request, response }
+  );
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (error) throw error;
+  return json(
+    { dt: new Date(), data },
+    {
+      headers: response.headers,
+    }
+  );
+};
+
 export default function Index() {
+  const loaderData = useLoaderData();
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      <h1 className="text-gray-500">Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div className="min-h-full mx-auto max-w-sm p-8">
+      <h1 className="text-gray-500 text-center">Welcome to Access</h1>
+      <div className="flex justify-between mt-3">
+        <Link to="login">Login</Link>
+        <Link to="logout">Logout</Link>
+      </div>
+      <pre className="mt-3">{JSON.stringify(loaderData, null, 2)}</pre>
     </div>
   );
 }

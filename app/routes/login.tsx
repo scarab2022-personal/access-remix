@@ -20,7 +20,20 @@ import { Form } from "~/components/form";
 export const loader: LoaderFunction = async ({ request }) => {
   // const userId = await getUserId(request);
   // if (userId) return redirect("/");
-  return json({ dt: new Date() });
+  const response = new Response();
+  const supabaseClient = createServerClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
+    { request, response }
+  );
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (error) throw error;
+  return json(
+    { dt: new Date(), data },
+    {
+      headers: response.headers,
+    }
+  );
 };
 
 const FieldValues = z
@@ -32,11 +45,7 @@ const FieldValues = z
       .email()
       .transform((v) => v.toLowerCase()),
     // password: z.string().min(8).max(50),
-    // redirectTo: z.string(),
-    // remember: z
-    //   .string()
-    //   .optional()
-    //   .transform((v) => v === "on"),
+    redirectTo: z.string(),
   })
   .strict();
 
@@ -61,15 +70,12 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
   const { email } = parseResult.data;
-
   const response = new Response();
-
   const supabaseClient = createServerClient(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_ANON_KEY!,
     { request, response }
   );
-
   const { data, error } = await supabaseClient.auth.signInWithOtp({
     email,
   });
@@ -82,21 +88,6 @@ export const action: ActionFunction = async ({ request }) => {
       headers: response.headers,
     }
   );
-  // const user = await verifyLogin(email, password);
-
-  // if (!user) {
-  //   return json<ActionData>(
-  //     {
-  //       formErrors: {
-  //         formErrors: [],
-  //         fieldErrors: {
-  //           email: ["Invalid email"],
-  //         },
-  //       },
-  //     },
-  //     { status: 400 }
-  //   );
-  // }
 
   // return createUserSession({
   //   request,
@@ -178,24 +169,6 @@ export default function LoginPage() {
                 autoComplete="email"
               />
             </Form.Field>
-
-            {/* <Form.Group className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  {" "}
-                  Remember me{" "}
-                </label>
-              </div>
-            </Form.Group> */}
             <input type="hidden" name="redirectTo" value={redirectTo} />
           </Form.Body>
           <Form.Footer>
