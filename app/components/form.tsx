@@ -255,7 +255,7 @@ Form.Errors = function FormErrors({
   ...rest
 }: { errors?: string[] } & JSX.IntrinsicElements["p"]) {
   return errors && errors.length > 0 ? (
-    <p className={clsx(className, "mt-2 text-sm text-red-600")} {...rest}>
+    <p className={clsx(className, "mt-6 text-sm text-red-600")} {...rest}>
       {errors.join(". ")}
     </p>
   ) : null;

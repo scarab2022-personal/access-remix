@@ -46,6 +46,8 @@
 - pnpm supabase migrations list
 - psql: \i supabase/seed.sql
 - pnpm supabase gen types typescript --local > DatabaseDefinitions.ts
+- studio url: http://localhost:54323
+- inbucket url: http://localhost:54324
 - psql postgresql://postgres:postgres@localhost:54322/postgres
 
 ## Reset Prod DB (hacky and risky)
