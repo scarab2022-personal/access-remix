@@ -45,7 +45,7 @@
 - pnpm supabase db push -p [db password]
 - pnpm supabase migrations list
 - psql: \i supabase/seed.sql
-- pnpm supabase gen types typescript --local > DatabaseDefinitions.ts
+- pnpm supabase gen types typescript --local > db_types.ts
 - studio url: http://localhost:54323
 - inbucket url: http://localhost:54324
 - psql postgresql://postgres:postgres@localhost:54322/postgres
