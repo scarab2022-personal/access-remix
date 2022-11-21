@@ -43,7 +43,8 @@
 - pnpm supabase db branch create | delete | list | switch
 - pnpm supabase link -p [db password] --project-ref [string]
 - pnpm supabase db push -p [db password]
-- pnpm supabase migrations list
+- pnpm supabase migration list
+- pnpm supabase migration new <migration name>
 - psql: \i supabase/seed.sql
 - pnpm supabase gen types typescript --local > db_types.ts
 - studio url: http://localhost:54323
