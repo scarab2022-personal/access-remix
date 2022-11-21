@@ -1,20 +1,13 @@
 begin;
 
-select ah.*,
-    ap.*
-from access_hub ah
-    join access_point ap using (access_hub_id)
-order by ah.access_hub_id,
-    position \gdesc
-
-create or replace function ah_get (access_hub_id integer, customer_id uuid)
+create or replace function get_access_hub (access_hub_id integer, customer_id uuid)
     returns table (
         access_hub_id integer,
         name text,
         description text,
-        customer_id uuid
-    )
-    as $$
+        customer_id uuid)
+begin
+    atomic
     select ah.access_hub_id,
         ah.name,
         ah.description,
@@ -24,11 +17,32 @@ create or replace function ah_get (access_hub_id integer, customer_id uuid)
     where ah.access_hub_id = $1
         and ah.customer_id = $2;
 
-$$
-language sql;
+    end;
 
 select *
-from ah_get (4, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
+from get_access_hub (4, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
+
+create or replace function get_access_hubs (customer_id uuid)
+    returns table (
+        access_hub_id integer,
+        name text,
+        description text,
+        customer_id uuid)
+begin
+    atomic
+    select access_hub_id,
+        name,
+        description,
+        customer_id
+    from access_hub ah
+        join auth.users on id = customer_id
+    where customer_id = $1
+    order by name;
+
+    end;
+
+select *
+from get_access_hubs ('733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 
 rollback;
 
