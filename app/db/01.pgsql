@@ -33,5 +33,17 @@ begin
 select *
 from get_access_hubs ('733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 
+create or replace function get_access_hub_info ()
+    returns setof access_hub
+    as $$
+    select *
+    from access_hub;
+
+$$
+language SQL;
+
+select *
+from get_access_hub_info ();
+
 rollback;
 

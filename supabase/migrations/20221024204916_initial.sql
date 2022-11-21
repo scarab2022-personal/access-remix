@@ -62,3 +62,4 @@ create index on access_event (access_user_id);
 
 create index on access_event (access_point_id);
 
+
