@@ -12,6 +12,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useNavigate,
 } from "@remix-run/react";
 import {
   createBrowserClient,
@@ -83,8 +84,39 @@ export default function App() {
   const { env, initialSession } = useLoaderData<LoaderData>();
   const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
   const [session, setSession] = useState<Session | null>(initialSession);
+  const navigate = useNavigate();
 
   const context: ContextType = { supabase, session };
+
+  console.log({ env, initialSession });
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
+    console.log("handleSubmit???()");
+    event.preventDefault();
+    if (!supabase) return;
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("loginEmail") as string;
+    const password = formData.get("loginPassword") as string;
+
+    // const { data, error } = await supabase.auth.signInWithPassword({
+    //   email,
+    //   password,
+    // });
+    // console.log({ data, error });
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({ email });
+      console.log({ auth: "signInWithOtp", email, error });
+      if (error) throw error;
+      alert("Check your email for the login link!");
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(`${error.name}: ${error.message}`);
+      }
+    }
+  };
 
   useEffect(() => {
     if (!supabase) {
@@ -95,8 +127,8 @@ export default function App() {
       setSupabase(supabaseClient);
       const {
         data: { subscription },
-      } = supabaseClient.auth.onAuthStateChange((_, session) => {
-        console.log({ onAuthStatusChange: session });
+      } = supabaseClient.auth.onAuthStateChange((event, session) => {
+        console.log({ auth: "onAuthStateChange", event, session });
         setSession(session);
       });
       return () => {
@@ -112,6 +144,35 @@ export default function App() {
         <Links />
       </head>
       <body>
+        {session && (
+          <button
+            onClick={async () => {
+              await supabase?.auth.signOut();
+              navigate("/");
+            }}
+          >
+            Logout
+          </button>
+        )}
+        {supabase && !session && (
+          <form onSubmit={handleSubmit}>
+            <h1>Custom login form:</h1>
+            <div>
+              <label htmlFor="loginEmail">Email:</label>
+              <input type="text" id="loginEmail" name="loginEmail" required />
+            </div>
+            <div>
+              <label htmlFor="loginPassword">Password:</label>
+              <input
+                type="password"
+                id="loginPassword"
+                name="loginPassword"
+                required
+              />
+            </div>
+            <button type="submit">Login</button>
+          </form>
+        )}
         <Outlet context={context} />
         <ScrollRestoration />
         <Scripts />
