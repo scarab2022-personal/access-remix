@@ -5,7 +5,6 @@ import {
   useLoaderData,
   useNavigate,
   useOutletContext,
-  useSubmit,
 } from "@remix-run/react";
 import { createServerClient } from "@supabase/auth-helpers-remix";
 import type { ContextType } from "~/root";
@@ -30,7 +29,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Index() {
   const loaderData = useLoaderData();
   const { supabase, session } = useOutletContext<ContextType>();
-  // const submit = useSubmit();
   const navigate = useNavigate();
   return (
     <div className="min-h-full mx-auto max-w-sm p-8">
@@ -39,13 +37,6 @@ export default function Index() {
         <Link to="login">Login</Link>
         <Link
           to="logout"
-          // onClick={(e) => {
-          //   e.preventDefault();
-          //   submit(null, {
-          //     action: "/logout",
-          //     method: "post",
-          //   });
-          // }}
           onClick={async (e) => {
             e.preventDefault();
             await supabase?.auth.signOut();

@@ -1,5 +1,4 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { createServerClient } from "@supabase/auth-helpers-remix";
 
@@ -11,15 +10,11 @@ export const action: ActionFunction = async ({ request }) => {
     { request, response }
   );
   const { error } = await supabaseClient.auth.signOut();
+  if (error) throw error;
 
-  // in order for the set-cookie header to be set,
-  // headers must be returned as part of the loader response
-  return json(
-    { error },
-    {
-      headers: response.headers,
-    }
-  );
+  return redirect("/", {
+    headers: response.headers,
+  });
 };
 
 export const loader: LoaderFunction = async () => {
