@@ -1,16 +1,19 @@
-import { Link, NavLink, useSubmit } from "@remix-run/react";
+import { Link, NavLink, useNavigate, useSubmit } from "@remix-run/react";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
 import logoHref from "~/assets/logo.svg";
 import clsx from "clsx";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
 
 type Navigation = Array<{ name: string; href: string }>;
 
 function ProfileDropdown({
   userNavigation,
-}: Pick<Parameters<typeof Nav>[0], "userNavigation">) {
-  const submit = useSubmit();
+  supabase,
+}: Pick<Parameters<typeof Nav>[0], "userNavigation" | "supabase">) {
+  const navigate = useNavigate();
+
   return (
     <Menu as="div" className="relative">
       <div>
@@ -44,7 +47,7 @@ function ProfileDropdown({
               )}
             </Menu.Item>
           ))}
-          <Menu.Item key="logout">
+          <Menu.Item key="signout">
             {({ active }) => (
               <a
                 href="."
@@ -52,15 +55,14 @@ function ProfileDropdown({
                   active ? "bg-gray-100" : "",
                   "block px-4 py-2 text-sm text-gray-700"
                 )}
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.preventDefault();
-                  submit(null, {
-                    action: "/logout",
-                    method: "post",
-                  });
+                  console.log({ supabase, fn: "signOut" });
+                  await supabase.auth.signOut();
+                  navigate("/");
                 }}
               >
-                Log out
+                Sign out
               </a>
             )}
           </Menu.Item>
@@ -73,9 +75,13 @@ function ProfileDropdown({
 function MobileNavigation({
   navigation,
   userNavigation,
-}: Pick<Parameters<typeof Nav>[0], "navigation" | "userNavigation">) {
-  const user = useUser();
-  const submit = useSubmit();
+  user,
+  supabase,
+}: Pick<
+  Parameters<typeof Nav>[0],
+  "navigation" | "userNavigation" | "user" | "supabase"
+>) {
+  const navigate = useNavigate();
 
   return (
     <Disclosure.Panel className="sm:hidden">
@@ -118,19 +124,17 @@ function MobileNavigation({
               {item.name}
             </Disclosure.Button>
           ))}
-          <Disclosure.Button key="logout" as={Fragment}>
+          <Disclosure.Button key="signout" as={Fragment}>
             <a
               href="."
               className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
-                submit(null, {
-                  action: "/logout",
-                  method: "post",
-                });
+                await supabase.auth.signOut();
+                navigate("/");
               }}
             >
-              Log out
+              Sign out
             </a>
           </Disclosure.Button>
         </div>
@@ -142,12 +146,14 @@ function MobileNavigation({
 export function Nav({
   navigation,
   userNavigation,
+  user,
+  supabase,
 }: {
   navigation: Navigation;
   userNavigation: Navigation;
+  user: User;
+  supabase: SupabaseClient;
 }) {
-  const user = useUser();
-
   // With page heading and stacked list
   // https://tailwindui.com/components/application-ui/page-examples/detail-screens
   // Simple
@@ -187,7 +193,10 @@ export function Nav({
             ))}
             <li className="ml-auto hidden sm:block">{user.email}</li>
             <li className="ml-6 hidden sm:block">
-              <ProfileDropdown userNavigation={userNavigation} />
+              <ProfileDropdown
+                userNavigation={userNavigation}
+                supabase={supabase}
+              />
             </li>
             <li className="ml-auto -mr-2 sm:hidden">
               <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -203,6 +212,8 @@ export function Nav({
           <MobileNavigation
             navigation={navigation}
             userNavigation={userNavigation}
+            user={user}
+            supabase={supabase}
           />
         </>
       )}
