@@ -1,0 +1,107 @@
+
+
+const userId = await requireUserIdForRole(request, "customer");
+Query: SELECT "public"."User"."id", "public"."User"."email", "public"."User"."role", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE "public"."User"."id" = $1 LIMIT $2 OFFSET $3
+Params: ["clb6wd9gu0014zjthiewg7wfu",1,0]
+
+const accessHubs = await prisma.accessHub.findMany({
+    where: {
+      userId,
+    },
+    orderBy: [{ name: "asc" }],
+    include: {
+      accessPoints: {
+        orderBy: [{ position: "asc" }],
+        include: {
+          _count: {
+            select: { accessUsers: true },
+          },
+        },
+      },
+    },
+  });
+Query: SELECT "public"."User"."id", "public"."User"."email", "public"."User"."role", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE "public"."User"."id" = $1 LIMIT $2 OFFSET $3
+Params: ["clb6wd9gu0014zjthiewg7wfu",1,0]
+
+Query: SELECT "public"."AccessHub"."id", "public"."AccessHub"."name", "public"."AccessHub"."description", "public"."AccessHub"."heartbeatAt", "public"."AccessHub"."userId" 
+FROM "public"."AccessHub" 
+WHERE "public"."AccessHub"."userId" = $1 
+ORDER BY "public"."AccessHub"."name" ASC OFFSET $2
+Params: ["clb6wd9gu0014zjthiewg7wfu",0]
+
+Query: SELECT "public"."AccessPoint"."id", "public"."AccessPoint"."name", "public"."AccessPoint"."description", "public"."AccessPoint"."accessHubId", "public"."AccessPoint"."position", 
+  "aggr_selection_0_AccessUser"."_aggr_count_accessUsers" 
+FROM "public"."AccessPoint" 
+  LEFT JOIN (SELECT "public"."AccessPoint"."id", COUNT(("public"."_AccessPointToAccessUser"."A")) AS "_aggr_count_accessUsers" 
+    FROM "public"."AccessPoint" LEFT JOIN "public"."_AccessPointToAccessUser" ON ("public"."AccessPoint"."id" = ("public"."_AccessPointToAccessUser"."A")) 
+GROUP BY "public"."AccessPoint"."id") AS "aggr_selection_0_AccessUser" ON ("public"."AccessPoint"."id" = "aggr_selection_0_AccessUser"."id") 
+WHERE "public"."AccessPoint"."accessHubId" IN ($1,$2) ORDER BY "public"."AccessPoint"."position" ASC OFFSET $3
+Params: ["cl2uwi6uv0030ybthbkls5w0i","clb6wdbyb0029zjthm3ithpss",0]
+
+const groupBy = await prisma.accessEvent.groupBy({
+    by: ["accessPointId", "access"],
+    orderBy: [{ accessPointId: "asc" }],
+    _count: {
+      _all: true,
+    },
+    where: {
+      at: {
+        gte: new Date(Date.now() - 24 * 60 * 60 * 1000),
+      },
+      accessPoint: {
+        accessHub: {
+          user: {
+            id: userId,
+          },
+        },
+      },
+    },
+  });
+Query: SELECT COUNT(*), "public"."AccessEvent"."accessPointId", "public"."AccessEvent"."access" FROM "public"."AccessEvent" WHERE ("public"."AccessEvent"."at" >= $1 AND ("public"."AccessEvent"."id") IN (SELECT "t0"."id" FROM "public"."AccessEvent" AS "t0" INNER JOIN "public"."AccessPoint" AS "j0" ON ("j0"."id") = ("t0"."accessPointId") WHERE (("j0"."id") IN (SELECT "t1"."id" FROM "public"."AccessPoint" AS "t1" INNER JOIN "public"."AccessHub" AS "j1" ON ("j1"."id") = ("t1"."accessHubId") WHERE (("j1"."id") IN (SELECT "t2"."id" FROM "public"."AccessHub" AS "t2" INNER JOIN "public"."User" AS "j2" ON ("j2"."id") = ("t2"."userId") WHERE ("j2"."id" = $2 AND "t2"."id" IS NOT NULL)) AND "t1"."id" IS NOT NULL)) AND "t0"."id" IS NOT NULL))) GROUP BY "public"."AccessEvent"."accessPointId", "public"."AccessEvent"."access" ORDER BY "public"."AccessEvent"."accessPointId" ASC OFFSET $3
+Params: [2022-12-01 19:28:43.265 UTC,"clb6wd9gu0014zjthiewg7wfu",0]
+
+const pointsStats = groupBy.reduce(
+    (acc: { [key: number]: { grant: number; deny: number } }, v) => {
+      const {
+        accessPointId,
+        access,
+        _count: { _all: count },
+      } = v;
+      if (!acc[accessPointId]) {
+        acc[accessPointId] = { grant: 0, deny: 0 };
+      }
+      if (access === "grant" || access === "deny") {
+        acc[accessPointId][access] = count;
+      }
+      return acc;
+    },
+    {}
+  );
+
+  const accessHubsWithStats = accessHubs.map((h) => {
+    const accessPointsWithStats = h.accessPoints.map((p) => {
+      return {
+        ...p,
+        _count: {
+          ...p._count,
+          ...(pointsStats[p.id] ?? { grant: 0, deny: 0 }),
+        },
+      };
+    });
+    return {
+      ...h,
+      accessPoints: accessPointsWithStats,
+      connectionStatus: connectionStatus(h.heartbeatAt),
+      _count: accessPointsWithStats.reduce(
+        (acc, v) => {
+          return {
+            grant: acc.grant + v._count.grant,
+            deny: acc.deny + v._count.deny,
+          };
+        },
+        { grant: 0, deny: 0 }
+      ),
+    };
+  });
+
+  return { accessHubsWithStats };
