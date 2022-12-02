@@ -34,9 +34,6 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  // environment variables may be stored somewhere other than
-  // `process.env` in runtimes other than node
-  // we need to pipe these Supabase environment variables to the browser
   const { SUPABASE_URL, SUPABASE_ANON_KEY } = process.env;
   if (SUPABASE_URL === undefined || SUPABASE_ANON_KEY === undefined) {
     throw new Error("SUPABASE_URL or SUPABASE_ANON_KEY env vars undefined");
@@ -54,8 +51,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     data: { session: initialSession },
   } = await supabaseClient.auth.getSession();
 
-  // in order for the set-cookie header to be set,
-  // headers must be returned as part of the loader response
   return json<LoaderData>(
     {
       initialSession,
@@ -65,7 +60,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       },
     },
     {
-      headers: response.headers,
+      headers: response.headers, // for set-cookie
     }
   );
 };
@@ -84,28 +79,7 @@ export default function App() {
   const { env, initialSession } = useLoaderData<LoaderData>();
   const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
   const [session, setSession] = useState<Session | null>(initialSession);
-  const navigate = useNavigate();
   const context: ContextType = { supabase, session };
-
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
-    event
-  ) => {
-    event.preventDefault();
-    if (!supabase) return;
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get("loginEmail") as string;
-
-    try {
-      const { error } = await supabase.auth.signInWithOtp({ email });
-      console.log({ auth: "signInWithOtp", email, error });
-      if (error) throw error;
-      alert("Check your email for the login link!");
-    } catch (error) {
-      if (error instanceof Error) {
-        alert(`${error.name}: ${error.message}`);
-      }
-    }
-  };
 
   useEffect(() => {
     if (!supabase) {
@@ -133,26 +107,6 @@ export default function App() {
         <Links />
       </head>
       <body>
-        {session && (
-          <button
-            onClick={async () => {
-              await supabase?.auth.signOut();
-              navigate("/");
-            }}
-          >
-            Logout
-          </button>
-        )}
-        {supabase && !session && (
-          <form onSubmit={handleSubmit}>
-            <h1>Login form:</h1>
-            <div>
-              <label htmlFor="loginEmail">Email:</label>
-              <input type="text" id="loginEmail" name="loginEmail" required />
-            </div>
-            <button type="submit">Login</button>
-          </form>
-        )}
         <Outlet context={context} />
         <ScrollRestoration />
         <Scripts />

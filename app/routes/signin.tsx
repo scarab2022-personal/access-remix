@@ -189,7 +189,7 @@ export default function SignInPage() {
           <SignInForm />
         )}
       </div>
-      <pre>{JSON.stringify({ loaderData, actionData }, null, 2)}</pre>
+      {/* <pre>{JSON.stringify({ loaderData, actionData }, null, 2)}</pre> */}
     </div>
   );
 }
