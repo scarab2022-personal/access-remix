@@ -1,6 +1,8 @@
-import "server-only";
 import { Pool } from "pg";
-import { IDatabaseConnection, PreparedQuery } from "@pgtyped/query/lib/tag";
+import type {
+  IDatabaseConnection,
+  PreparedQuery,
+} from "@pgtyped/query/lib/tag";
 import _ from "lodash";
 
 // https://www.prisma.io/docs/guides/database/troubleshooting-orm/help-articles/nextjs-prisma-client-dev-practices
