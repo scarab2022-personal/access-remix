@@ -34,7 +34,7 @@ export default function Index() {
     <div className="min-h-full mx-auto max-w-sm p-8">
       <h1 className="text-gray-500 text-center">Welcome to Access</h1>
       <div className="flex justify-between mt-3">
-        <Link to="login">Login</Link>
+        <Link to="signin">Sign In</Link>
         <Link
           to="logout"
           onClick={async (e) => {
@@ -43,7 +43,7 @@ export default function Index() {
             navigate("/");
           }}
         >
-          Logout
+          Sign Out
         </Link>
       </div>
       <pre className="mt-3">

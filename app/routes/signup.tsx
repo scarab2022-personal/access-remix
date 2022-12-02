@@ -3,38 +3,14 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import {
-  Link,
-  useActionData,
-  useLoaderData,
-  useSearchParams,
-} from "@remix-run/react";
+import { json, redirect } from "@remix-run/node";
+import { Link, useActionData, useSearchParams } from "@remix-run/react";
 import { createServerClient } from "@supabase/auth-helpers-remix";
-import type { AuthResponse } from "@supabase/supabase-js";
+import { AuthResponse } from "@supabase/supabase-js";
 import * as React from "react";
 import type { ZodError } from "zod";
 import { z } from "zod";
 import { Form } from "~/components/form";
-
-export const loader: LoaderFunction = async ({ request }) => {
-  // const userId = await getUserId(request);
-  // if (userId) return redirect("/");
-  const response = new Response();
-  const supabaseClient = createServerClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
-    { request, response }
-  );
-  const { data, error } = await supabaseClient.auth.getSession();
-  if (error) throw error;
-  return json(
-    { dt: new Date(), data },
-    {
-      headers: response.headers,
-    }
-  );
-};
 
 const FieldValues = z
   .object({
@@ -44,12 +20,17 @@ const FieldValues = z
       .max(50)
       .email()
       .transform((v) => v.toLowerCase()),
-    redirectTo: z.string(),
+    // redirectTo: z.string(),
   })
   .strict();
 
+export const loader: LoaderFunction = async ({ request }) => {
+  // const userId = await getUserId(request);
+  // if (userId) return redirect("/");
+  return json({});
+};
+
 type ActionData = {
-  dt: Date;
   formErrors?: ZodError["formErrors"];
   authData?: AuthResponse["data"];
   authError?: AuthResponse["error"];
@@ -62,7 +43,6 @@ export const action: ActionFunction = async ({ request }) => {
   if (!parseResult.success) {
     return json<ActionData>(
       {
-        dt: new Date(),
         formErrors: parseResult.error.formErrors,
       },
       { status: 400 }
@@ -79,38 +59,47 @@ export const action: ActionFunction = async ({ request }) => {
     email,
   });
   if (error) throw error;
-
   return json<ActionData>(
-    { dt: new Date(), authData: data, authError: error },
+    { authData: data, authError: error },
     {
       headers: response.headers, // for set-cookie
     }
   );
 
+  // const existingUser = await getUserByEmail(email);
+  // if (existingUser) {
+  //   return json<ActionData>(
+  //     {
+  //       formErrors: {
+  //         formErrors: [],
+  //         fieldErrors: {
+  //           email: ["A user already exists with this email"],
+  //         },
+  //       },
+  //     },
+  //     { status: 400 }
+  //   );
+  // }
+
+  // const user = await createUser(email, password, "customer");
   // return createUserSession({
   //   request,
   //   userId: user.id,
-  //   remember,
-  //   redirectTo:
-  //     redirectTo !== ""
-  //       ? redirectTo
-  //       : user.role === "admin"
-  //       ? "/admin/dashboard"
-  //       : "/access/dashboard",
+  //   remember: false,
+  //   redirectTo: typeof redirectTo === "string" ? redirectTo : "/",
   // });
 };
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Login",
+    title: "Sign Up",
   };
 };
 
-function LoginForm() {
+function SignUpForm() {
   const [searchParams] = useSearchParams();
-  // const redirectTo = searchParams.get("redirectTo") || "/access/dashboard";
-  const redirectTo = searchParams.get("redirectTo") || "";
-  const actionData = useActionData<ActionData>();
+  // const redirectTo = searchParams.get("redirectTo") ?? undefined;
+  const actionData = useActionData() as ActionData;
   const emailRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -122,28 +111,20 @@ function LoginForm() {
   return (
     <Form method="post" className="py-8 px-4 sm:px-10" noValidate replace>
       <Form.Header className="align-center flex flex-col">
-        <Form.H3 prominent>Log into your account</Form.H3>
+        <Form.H3 prominent>Sign up for an account</Form.H3>
         <Form.P prominent>
           Or{" "}
           <Link
             to={{
-              pathname: "/join",
+              pathname: "/signin",
               search: searchParams.toString(),
             }}
             className="font-medium text-indigo-600 hover:text-indigo-500"
           >
-            join here
+            sign in here
           </Link>
         </Form.P>
       </Form.Header>
-
-      {actionData?.formErrors?.formErrors ? (
-        <Form.Errors
-          id="form-errors"
-          role="alert"
-          errors={actionData.formErrors.formErrors}
-        />
-      ) : null}
       <Form.Body>
         <Form.Field
           id="email"
@@ -160,20 +141,16 @@ function LoginForm() {
             autoComplete="email"
           />
         </Form.Field>
-        <input type="hidden" name="redirectTo" value={redirectTo} />
+        {/* <input type="hidden" name="redirectTo" value={redirectTo} /> */}
       </Form.Body>
       <Form.Footer>
-        <Form.SubmitButton wide>Log in</Form.SubmitButton>
+        <Form.SubmitButton wide>Sign up</Form.SubmitButton>
       </Form.Footer>
     </Form>
   );
 }
 
-export default function LoginPage() {
-  const [searchParams] = useSearchParams();
-  // const redirectTo = searchParams.get("redirectTo") || "/access/dashboard";
-  const redirectTo = searchParams.get("redirectTo") || "";
-  const loaderData = useLoaderData();
+export default function SignUpPage() {
   const actionData = useActionData<ActionData>();
 
   // Simple card
@@ -184,12 +161,12 @@ export default function LoginPage() {
     <div className="flex min-h-full flex-col justify-center sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         {actionData?.authData ? (
-          <p>Check your email for the login link.</p>
+          <p>Check your email for the sign in link.</p>
         ) : (
-          <LoginForm />
+          <SignUpForm />
         )}
       </div>
-      <pre>{JSON.stringify({ loaderData, actionData }, null, 2)}</pre>
+      <pre>{JSON.stringify({ actionData }, null, 2)}</pre>
     </div>
   );
 }
