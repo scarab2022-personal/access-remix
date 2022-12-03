@@ -15,12 +15,15 @@ async function getLoaderData(
   { customerId }: { customerId: User["id"] },
   supabaseClient: SupabaseClient<Database>
 ) {
-  const { data, error } = await supabaseClient.rpc("get_access_hubs", {
-    customer_id: customerId,
-  });
-  console.log({ data, error });
-  // const accessHubs = await getAccessHubs.run({ customerId }, pgTypedClient);
-  return { accessHubs: data };
+  const { data: stats, error: statsError } = await supabaseClient.rpc(
+    "get_grant_deny_stats",
+    {
+      customer_id: customerId,
+    }
+  );
+  if (statsError) throw statsError;
+
+  return { stats };
 }
 
 export const loader: LoaderFunction = async ({
@@ -48,7 +51,6 @@ export const loader: LoaderFunction = async ({
   }
 
   const data = await getLoaderData({ customerId: user.id }, supabaseClient);
-  console.log(data);
 
   return json<LoaderData>(data, {
     headers: response.headers, // for set-cookie
@@ -56,12 +58,10 @@ export const loader: LoaderFunction = async ({
 };
 
 export default function RouteComponent() {
-  // const {data} = useLoaderData<typeof loader>();
-  const { accessHubs } = useLoaderData<LoaderData>();
+  const { stats } = useLoaderData<LoaderData>();
   return (
     <div>
-      <div>Access Dashboard</div>
-      <pre>{JSON.stringify(accessHubs, null, 2)}</pre>
+      <pre>{JSON.stringify(stats, null, 2)}</pre>
     </div>
   );
 }

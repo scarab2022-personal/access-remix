@@ -143,6 +143,20 @@ export interface Database {
         Args: { customer_id: string }
         Returns: unknown
       }
+      get_grant_deny_stats: {
+        Args: { customer_id: string }
+        Returns: {
+          access_hub_id: number
+          name: string
+          heartbeat_at: string
+          access_point_id: number
+          access_point_name: string
+          access_point_position: number
+          grant: number
+          deny: number
+          grouping: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
