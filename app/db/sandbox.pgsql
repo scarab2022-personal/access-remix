@@ -48,8 +48,7 @@ create or replace function get_hubs_with_stats (customer_id uuid)
         join access_point ap using (access_hub_id)
         join access_event ae using (access_point_id)
     where customer_id = $1
-    group by ah.access_hub_id,
-        ap.access_point_id
+    group by rollup ((ah.access_hub_id, ah.name), (ap.access_point_id, ap.name, ap.position))
     order by ah.name,
         ap.position;
 
