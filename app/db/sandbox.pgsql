@@ -26,11 +26,41 @@ $$
 language sql
 security definer set search_path = public, pg_temp;
 
-select *
-from get_access_points_by_hubs (array[]::integer[]);
+create or replace function get_hubs_with_stats (customer_id uuid)
+    returns table (
+        access_hub_id access_hub.access_hub_id%type,
+        name access_hub.name%type,
+        access_point_id access_point.access_point_id%type,
+        access_point_name access_point.name%type,
+        access_point_position access_point.position%type,
+        access_event_id access_event.access_event_id%type,
+        access_event_access access_event.access%type
+    )
+    as $$
+    select ah.access_hub_id,
+        ah.name,
+        ap.access_point_id,
+        ap.name,
+        ap.position,
+        ae.access_event_id,
+        ae.access
+    from access_hub ah
+        join access_point ap using (access_hub_id)
+        join access_event ae using (access_point_id)
+    where customer_id = $1
+    order by ah.name,
+        ap.position;
 
+$$
+language sql
+security definer set search_path = public, pg_temp;
+
+-- select *
+-- from get_access_points_by_hubs (array[]::integer[]);
+-- select *
+-- from get_access_points_by_hubs (array[3, 4]);
 select *
-from get_access_points_by_hubs (array[3, 4]);
+from get_hubs_with_stats ('733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 
 rollback;
 
