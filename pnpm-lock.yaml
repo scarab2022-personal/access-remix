@@ -31,7 +31,7 @@ specifiers:
   prettier-plugin-tailwindcss: 0.1.13
   react: ^18.2.0
   react-dom: ^18.2.0
-  supabase: 1.15.0
+  supabase: 1.17.4
   tailwindcss: 3.2.4
   typescript: ^4.9.3
   zod: 3.19.1
@@ -70,7 +70,7 @@ devDependencies:
   npm-run-all: 4.1.5
   prettier: 2.7.1
   prettier-plugin-tailwindcss: 0.1.13_prettier@2.7.1
-  supabase: 1.15.0
+  supabase: 1.17.4
   tailwindcss: 3.2.4
   typescript: 4.9.3
 
@@ -1890,8 +1890,8 @@ packages:
       - encoding
     dev: false
 
-  /@supabase/gotrue-js/2.3.1:
-    resolution: {integrity: sha512-txYVDrKAFXxT4nyVGnW3M9Oid4u3Xe/Na+wTEzwU+IBuPUEz72ZBHNKo6HBKlZNpnlGtgCSciYhH8qFkZYGV3g==}
+  /@supabase/gotrue-js/2.4.2:
+    resolution: {integrity: sha512-OjonGyH0DvFcLAM9QrX73hSM6qXBAvgnISyOvjidUUIh9GgcYAJRWWysjN7Rn3QVpKNGQ65JE6gkuXBIGz1gcg==}
     dependencies:
       cross-fetch: 3.1.5
     transitivePeerDependencies:
@@ -1927,7 +1927,7 @@ packages:
     resolution: {integrity: sha512-6uBz31zrYfXkb5f2lzSHtncLWDQG5LvuH/OrmIAJqnjvliyd1pXMCGn/03xTfnflbjMolbOva+XMrydkyIMDfQ==}
     dependencies:
       '@supabase/functions-js': 2.0.0
-      '@supabase/gotrue-js': 2.3.1
+      '@supabase/gotrue-js': 2.4.2
       '@supabase/postgrest-js': 1.1.0
       '@supabase/realtime-js': 2.1.0
       '@supabase/storage-js': 2.0.0
@@ -4807,7 +4807,7 @@ packages:
     resolution: {integrity: sha512-V/JgOLFCS+R6Vcq0slCuaeWEdNC3ouDlJMNIsacH2VtALiu9mV4LPrHc5cDl8k5aw6J8jwgWWpiTo5RYhmIzvg==}
     engines: {node: '>= 8'}
     dependencies:
-      minipass: 3.3.4
+      minipass: 3.3.6
     dev: true
 
   /fs.realpath/1.0.0:
@@ -6513,11 +6513,18 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /minipass/3.3.6:
+    resolution: {integrity: sha512-DxiNidxSEK+tHG6zOIklvNOwm3hvCrbUrdtzY74U6HKTJxvIDfOUL5W5P2Ghd3DTkhhKPYGqeNUIh5qcM4YBfw==}
+    engines: {node: '>=8'}
+    dependencies:
+      yallist: 4.0.0
+    dev: true
+
   /minizlib/2.1.2:
     resolution: {integrity: sha512-bAxsR8BVfj60DWXHE3u30oHzfl4G7khkSuPW+qvpd7jFRHm7dLxOjUk1EHACJ/hxLY8phGJ0YhYHZo7jil7Qdg==}
     engines: {node: '>= 8'}
     dependencies:
-      minipass: 3.3.4
+      minipass: 3.3.6
       yallist: 4.0.0
     dev: true
 
@@ -8232,8 +8239,8 @@ packages:
       inline-style-parser: 0.1.1
     dev: true
 
-  /supabase/1.15.0:
-    resolution: {integrity: sha512-HgXzzgtw3Vfjm8OfOO4G9MRMgu9N79EZSsekJORNOdwMQFk1DT1cl+VOrifNwQSi6nnMdyaMGvvYeZ05FRNL9w==}
+  /supabase/1.17.4:
+    resolution: {integrity: sha512-xOrSZA2nyqGadDNgjXPTXk/ZvM5EE6DXf2xXbDmsnpNpTF7DUEVprNfpWPWRV02uh8YxNSkR2qL4Z/tkPXA0lA==}
     hasBin: true
     requiresBuild: true
     dependencies:
@@ -8331,7 +8338,7 @@ packages:
     dependencies:
       chownr: 2.0.0
       fs-minipass: 2.1.0
-      minipass: 3.3.4
+      minipass: 3.3.6
       minizlib: 2.1.2
       mkdirp: 1.0.4
       yallist: 4.0.0

@@ -1,26 +1,16 @@
 begin;
 
--- \set accessHubIds 3, 4
--- \set accessHubIds 2
-select access_point.*
-from access_point
-where access_hub_id in (:accessHubIds);
-
 create or replace function get_access_points_by_hubs (access_hub_ids int[])
     returns table (
-        access_point_id int,
-        name text,
-        description text,
-        "position" integer,
-        access_hub_id integer,
-        access_user_id integer)
-    security definer
-    set search_path = public,
-    pg_temp
+        access_point_id access_point.access_point_id%type,
+        name access_point.name%type,
+        "position" access_point.position%type,
+        access_hub_id access_point.access_hub_id%type,
+        access_user_id access_user.access_user_id%type
+    )
     as $$
     select ap.access_point_id,
         ap.name,
-        ap.description,
         ap.position,
         ap.access_hub_id,
         au.access_user_id
@@ -33,14 +23,14 @@ create or replace function get_access_points_by_hubs (access_hub_ids int[])
         position;
 
 $$
-language sql;
+language sql
+security definer set search_path = public, pg_temp;
 
 select *
-from get_access_points_by_hubs ('{3, 4}');
+from get_access_points_by_hubs (array[]::integer[]);
 
--- select *
--- from get_access_points_by_hubs (array[1, 2]);
--- select *
--- from get_access_points_by_hubs (array[]::integer[]);
+select *
+from get_access_points_by_hubs (array[3, 4]);
+
 rollback;
 
