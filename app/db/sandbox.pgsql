@@ -33,8 +33,8 @@ create or replace function get_hubs_with_stats (customer_id uuid)
         access_point_id access_point.access_point_id%type,
         access_point_name access_point.name%type,
         access_point_position access_point.position%type,
-        access_event_id access_event.access_event_id%type,
-        access_event_access access_event.access%type
+        "grant" bigint,
+        deny bigint
     )
     as $$
     select ah.access_hub_id,
@@ -42,12 +42,14 @@ create or replace function get_hubs_with_stats (customer_id uuid)
         ap.access_point_id,
         ap.name,
         ap.position,
-        ae.access_event_id,
-        ae.access
+        count(*) filter (where ae.access = 'grant') as "grant",
+        count(*) filter (where ae.access = 'deny') as deny
     from access_hub ah
         join access_point ap using (access_hub_id)
         join access_event ae using (access_point_id)
     where customer_id = $1
+    group by ah.access_hub_id,
+        ap.access_point_id
     order by ah.name,
         ap.position;
 
