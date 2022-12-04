@@ -31,13 +31,13 @@ async function getLoaderData(
   { customerId }: { customerId: User["id"] },
   supabaseClient: SupabaseClient<Database>
 ) {
-  const { data: mistypedData, error: statsError } = await supabaseClient.rpc(
+  const { data: mistypedData, error } = await supabaseClient.rpc(
     "get_grant_deny_stats",
     {
       customer_id: customerId,
     }
   );
-  if (statsError) throw statsError;
+  if (error) throw error;
   // Supabase seems to be adding an extra array dimension.
   const data = mistypedData as unknown as typeof mistypedData[number];
   type Row = typeof data[number];

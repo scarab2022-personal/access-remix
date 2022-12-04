@@ -41,13 +41,13 @@
 - pnpm supabase start | stop | status
 - pnpm supabase db diff --use-migra --file [file_name]
 - pnpm supabase db reset --debug
+- pnpm supabase gen types typescript --local > db_types.ts
 - pnpm supabase db branch create | delete | list | switch
 - pnpm supabase link -p [db password] --project-ref [string]
 - pnpm supabase db push -p [db password]
 - pnpm supabase migration list
 - pnpm supabase migration new <migration name>
 - psql: \i supabase/seed.sql
-- pnpm supabase gen types typescript --local > db_types.ts
 - studio url: http://localhost:54323
 - inbucket url: http://localhost:54324
 - psql postgresql://postgres:postgres@localhost:54322/postgres
