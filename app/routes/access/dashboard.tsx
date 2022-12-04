@@ -1,3 +1,4 @@
+import * as R from "remeda";
 import type { LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData, useLocation } from "@remix-run/react";
@@ -43,20 +44,65 @@ async function getLoaderData(
   if (statsError) throw statsError;
   // Supabase seems to be adding an extra array dimension.
   const data = mistypedData as unknown as typeof mistypedData[number];
+  type Row = typeof data[number];
+  type Stats = {
+    grant: Row["grant"],
+    deny: Row["deny"],
+    hubs: Array<
+      Pick<
+        Row,
+        "access_hub_id" | "name" | "heartbeat_at" | "grant" | "deny"
+      > & {
+        points: Array<
+          Pick<
+            Row,
+            | "access_point_id"
+            | "access_point_name"
+            | "access_point_position"
+            | "grant"
+            | "deny"
+          >
+        >;
+      }
+    >;
+  };
 
-  const stats = data.reduce<any>(
+  const stats = data.reduce<Stats>(
     (acc, v) => {
       if (v.access_hub_id === null) {
-        return { ...acc, global: { grant: v.grant, deny: v.deny } };
+        return { ...acc, ...R.pick(v, ["grant", "deny"]) };
       } else if (v.access_point_id === null) {
-        const { access_hub_id, name, heartbeat_at, grant, deny} = v;
-        return { ...acc, hubs: [...acc.hubs, {access_hub_id, name, heartbeat_at, grant, deny, access_points: []}]}
+        return {
+          ...acc,
+          hubs: [
+            ...acc.hubs,
+            {
+              ...R.pick(v, [
+                "access_hub_id",
+                "name",
+                "heartbeat_at",
+                "grant",
+                "deny",
+              ]),
+              points: [],
+            },
+          ],
+        };
       }
-      const {access_point_id, access_point_name, access_point_position, grant, deny} = v;
-      acc.hubs.at(-1).access_points.push({access_point_id, access_point_name, access_point_position, grant, deny})
+      acc.hubs
+        .at(-1)!
+        .points.push(
+          R.pick(v, [
+            "access_point_id",
+            "access_point_name",
+            "access_point_position",
+            "grant",
+            "deny",
+          ])
+        );
       return acc;
     },
-    { hubs: [] }
+    { grant: 0, deny: 0, hubs: [] }
   );
 
   return { stats };
