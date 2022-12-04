@@ -9,10 +9,6 @@ import React from "react";
 import { PageHeader } from "~/components/page-header";
 import { Switch } from "~/components/switch";
 
-// export const loader = (async () => {
-//   return json({ data: "some data" });
-// }) satisfies  LoaderFunction;
-
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
 /*
@@ -46,8 +42,8 @@ async function getLoaderData(
   const data = mistypedData as unknown as typeof mistypedData[number];
   type Row = typeof data[number];
   type Stats = {
-    grant: Row["grant"],
-    deny: Row["deny"],
+    grant: Row["grant"];
+    deny: Row["deny"];
     hubs: Array<
       Pick<
         Row,
@@ -164,8 +160,73 @@ export default function RouteComponent() {
         }
       />
       <main className=" space-y-8">
-        <pre>{JSON.stringify(stats, null, 2)}</pre>
+        {(poll.data?.stats.hubs ?? stats.hubs).map((h) => {
+          // Simple cards: https://tailwindui.com/components/application-ui/lists/grid-lists
+          return (
+            <div
+              key={h.access_hub_id}
+              className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+            >
+              <div className="col-span-1 flex rounded-md shadow-sm">
+                {/* <div className="col-span-1 flex rounded-md border border-gray-300"> */}
+                <div className="flex w-16 flex-shrink-0 items-center justify-center rounded-l-md bg-pink-600 text-sm font-medium text-white">
+                  HUB
+                </div>
+                <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
+                  <div className="flex-1 truncate px-4 py-2 text-sm">
+                    <Link
+                      to={`../hubs/${h.access_hub_id}`}
+                      className="font-medium text-gray-900 hover:text-gray-600"
+                    >
+                      {h.name}
+                    </Link>
+                    <p className="text-gray-500">
+                      Grants: {h.grant} Denies: {h.deny}
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0  pr-2">
+                    {/* <Badge color={connectionStatusColors[h.connectionStatus]}>
+                      {h.connectionStatus}
+                    </Badge> */}
+                  </div>
+                </div>
+              </div>
+              {h.points.map((p) => {
+                return (
+                  <div
+                    key={p.access_point_id}
+                    className="col-span-1 flex rounded-md shadow-sm"
+                  >
+                    <div className="flex w-16 flex-shrink-0 items-center justify-center rounded-l-md bg-purple-600 text-sm font-medium text-white">
+                      {p.access_point_position}
+                    </div>
+                    <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-t border-r border-b border-gray-200 bg-white">
+                      <div className="flex-1 truncate px-4 py-2 text-sm">
+                        <Link
+                          to={`../hubs/${h.access_hub_id}/points/${p.access_point_id}`}
+                          className="font-medium text-gray-900 hover:text-gray-600"
+                        >
+                          {p.access_point_name}
+                        </Link>
+                        <p className="text-gray-500">
+                          Grants: {p.grant} Denies:
+                          {p.deny}
+                        </p>
+                      </div>
+                      <div className="flex-shrink-0  pr-2">
+                        {/* <p className="text-gray-500">
+                          {p._count.accessUsers} users
+                        </p> */}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
       </main>
+      {/* <pre>{JSON.stringify(stats, null, 2)}</pre> */}
     </>
   );
 }
