@@ -27,6 +27,7 @@
 - pnpm add -D @pgtyped/cli @pgtyped/query
 - pnpm add pg
 - pnpm add -D @types/pg
+- pnpm add remeda
 
 ## Supabase CLI
 

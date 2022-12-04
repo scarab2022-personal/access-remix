@@ -154,7 +154,6 @@ export interface Database {
           access_point_position: number
           grant: number
           deny: number
-          grouping: number
         }[]
       }
     }
