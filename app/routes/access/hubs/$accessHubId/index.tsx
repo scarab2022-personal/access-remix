@@ -11,32 +11,63 @@ import { json } from "@remix-run/node";
 import { useLoaderData, Link, useNavigate } from "@remix-run/react";
 import { Button } from "~/components/button";
 import invariant from "tiny-invariant";
-import { classNames } from "~/utils";
+import { classNames, requireAppRole } from "~/utils";
 import { PageHeader } from "~/components/page-header";
 import { Section } from "~/components/section";
 import { Table } from "~/components/table";
+import type { Database } from "db_types";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
-type LoaderData = {
-  accessHub: Awaited<ReturnType<typeof getAccessHubWithPoints>>;
-};
+type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
+
+async function getLoaderData({
+  access_hub_id,
+  customer_id,
+  supabaseClient,
+}: Database["public"]["Functions"]["get_access_hub_with_points"]["Args"] & {
+  supabaseClient: SupabaseClient<Database>;
+}) {
+  const { data: mistypedData, error } = await supabaseClient.rpc(
+    "get_access_hub_with_points",
+    {
+      access_hub_id,
+      customer_id,
+    }
+  );
+  if (error) throw error;
+  // Supabase seems to be adding an extra array dimension.
+  const data = mistypedData as unknown as typeof mistypedData[number];
+
+  return { results: data };
+}
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const userId = await requireUserIdForRole(request, "customer");
-  invariant(params.accessHubId, "accessHubId not found");
-  const accessHub = await getAccessHubWithPoints({
-    id: params.accessHubId,
-    userId,
+  const { user, headers, supabaseClient } = await requireAppRole({
+    request,
+    appRole: "customer",
   });
-  return json<LoaderData>({ accessHub });
+  invariant(params.accessHubId, "accessHubId not found");
+  const data = await getLoaderData({
+    access_hub_id: Number(params.accessHubId),
+    customer_id: user.id,
+    supabaseClient,
+  });
+  if (data.results.length === 0) {
+    throw new Error("Invalid access hub");
+  }
+  return json<LoaderData>(data, {
+    headers, // for set-cookie
+  });
 };
 
 export default function RouteComponent() {
-  const { accessHub } = useLoaderData<LoaderData>();
+  const { results } = useLoaderData<LoaderData>();
+  const hubResult = results[0];
   const navigate = useNavigate();
   return (
     <>
       <PageHeader
-        title={accessHub.name}
+        title={hubResult.name}
         meta={
           <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
             <div className="mt-2 flex items-center text-sm text-gray-500">
@@ -44,7 +75,7 @@ export default function RouteComponent() {
                 className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
                 aria-hidden="true"
               />
-              {accessHub.description}
+              {hubResult.description}
             </div>
           </div>
         }
@@ -121,12 +152,14 @@ export default function RouteComponent() {
                 </>
               }
             >
-              {accessHub.accessPoints.map((i) => (
-                <tr key={i.id}>
-                  <Table.Td>{i.position}</Table.Td>
-                  <Table.Td prominent>{i.name}</Table.Td>
-                  <Table.Td>{i.description}</Table.Td>
-                  <Table.TdLink to={`points/${i.id}`}>View</Table.TdLink>
+              {results.map((i) => (
+                <tr key={i.access_point_id}>
+                  <Table.Td>{i.access_point_position}</Table.Td>
+                  <Table.Td prominent>{i.access_point_name}</Table.Td>
+                  <Table.Td>{i.access_point_description}</Table.Td>
+                  <Table.TdLink to={`points/${i.access_point_id}`}>
+                    View
+                  </Table.TdLink>
                 </tr>
               ))}
             </Table>

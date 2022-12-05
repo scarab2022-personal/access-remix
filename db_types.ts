@@ -144,6 +144,7 @@ export interface Database {
           heartbeat_at: string
           access_point_id: number
           access_point_name: string
+          access_point_description: string
           access_point_position: number
         }[]
       }

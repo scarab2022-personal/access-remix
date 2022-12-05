@@ -1,4 +1,3 @@
-
 -- select * from get_access_hub_with_points (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 create or replace function get_access_hub_with_points (access_hub_id integer, customer_id uuid)
     returns table (
@@ -8,6 +7,7 @@ create or replace function get_access_hub_with_points (access_hub_id integer, cu
         heartbeat_at access_hub.heartbeat_at%type,
         access_point_id access_point.access_point_id%type,
         access_point_name access_point.name%type,
+        access_point_description access_point.description%type,
         access_point_position access_point.position%type
     )
     as $$
@@ -17,6 +17,7 @@ create or replace function get_access_hub_with_points (access_hub_id integer, cu
         ah.heartbeat_at,
         ap.access_point_id,
         ap.name,
+        ap.description,
         ap.position
     from access_hub ah
         join access_point ap using (access_hub_id)
