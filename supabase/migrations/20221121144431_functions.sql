@@ -26,7 +26,6 @@ create or replace function get_access_hubs (customer_id uuid)
         description,
         heartbeat_at
     from access_hub
-        join auth.users on id = customer_id
     where customer_id = $1
     order by name;
 
