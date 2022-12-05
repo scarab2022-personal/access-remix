@@ -27,28 +27,40 @@ language sql
 security definer set search_path = public, pg_temp;
 
 -- select * from get_access_hub (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
-create or replace function get_access_hub (access_hub_id access_hub.access_hub_id%type, customer_id auth.users.id%type)
+create or replace function get_access_hub_events (access_hub_id access_hub.access_hub_id%type, customer_id auth.users.id%type)
     returns table (
-        access_hub_id access_hub.access_hub_id%type,
-        name access_hub.name%type,
-        description access_hub.description%type,
-        heartbeat_at access_hub.heartbeat_at%type
+        access_event_id access_event.access_event_id%type,
+        at access_event.at%type,
+        access access_event.access%type,
+        code access_event.code%type,
+        access_user_name access_user.name%type,
+        access_point_id access_point.access_point_id%type,
+        access_point_name access_point.name%type
     )
     as $$
-    select access_hub_id,
-        name,
-        description,
-        heartbeat_at
-    from access_hub
-    where access_hub_id = $1
-        and customer_id = $2;
+    select ae.access_event_id,
+        ae.at,
+        ae.access,
+        ae.code,
+        au.name,
+        ap.access_point_id,
+        ap.name
+    from access_event ae
+        join access_point ap using (access_point_id)
+        join access_hub ah using (access_hub_id)
+        left join access_user au using (access_user_id)
+    where ah.access_hub_id = $1
+        and ah.customer_id = $2
+    order by ae.at desc,
+        ae.access_event_id desc
+    limit 10;
 
 $$
 language sql
 security definer set search_path = public, pg_temp;
 
 select *
-from get_access_hub (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
+from get_access_hub_events (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 
 rollback;
 
