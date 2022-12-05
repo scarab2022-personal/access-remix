@@ -26,10 +26,8 @@ $$
 language sql
 security definer set search_path = public, pg_temp;
 
-drop function get_access_hubs (uuid);
-
--- select * from get_access_hubs ('733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
-create or replace function get_access_hubs (customer_id uuid)
+-- select * from get_access_hub (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
+create or replace function get_access_hub (access_hub_id access_hub.access_hub_id%type, customer_id auth.users.id%type)
     returns table (
         access_hub_id access_hub.access_hub_id%type,
         name access_hub.name%type,
@@ -42,15 +40,15 @@ create or replace function get_access_hubs (customer_id uuid)
         description,
         heartbeat_at
     from access_hub
-    where customer_id = $1
-    order by name;
+    where access_hub_id = $1
+        and customer_id = $2;
 
 $$
 language sql
 security definer set search_path = public, pg_temp;
 
 select *
-from get_access_hubs ('733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
+from get_access_hub (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 
 rollback;
 

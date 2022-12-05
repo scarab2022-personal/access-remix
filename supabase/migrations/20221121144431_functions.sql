@@ -1,3 +1,24 @@
+-- select * from get_access_hub (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
+create or replace function get_access_hub (access_hub_id access_hub.access_hub_id%type, customer_id auth.users.id%type)
+    returns table (
+        access_hub_id access_hub.access_hub_id%type,
+        name access_hub.name%type,
+        description access_hub.description%type,
+        heartbeat_at access_hub.heartbeat_at%type
+    )
+    as $$
+    select access_hub_id,
+        name,
+        description,
+        heartbeat_at
+    from access_hub
+    where access_hub_id = $1
+        and customer_id = $2;
+
+$$
+language sql
+security definer set search_path = public, pg_temp;
+
 -- select * from get_access_hub_with_points (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 create or replace function get_access_hub_with_points (access_hub_id integer, customer_id uuid)
     returns table (

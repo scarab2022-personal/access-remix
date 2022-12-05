@@ -135,6 +135,15 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      get_access_hub: {
+        Args: { access_hub_id: number; customer_id: string }
+        Returns: {
+          access_hub_id: number
+          name: string
+          description: string
+          heartbeat_at: string
+        }[]
+      }
       get_access_hub_with_points: {
         Args: { access_hub_id: number; customer_id: string }
         Returns: {
