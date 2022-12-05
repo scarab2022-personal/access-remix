@@ -139,6 +139,18 @@ export interface Database {
         Args: { access_hub_id: number; customer_id: string }
         Returns: unknown
       }
+      get_access_hub_with_points: {
+        Args: { access_hub_id: number; customer_id: string }
+        Returns: {
+          access_hub_id: number
+          name: string
+          description: string
+          heartbeat_at: string
+          access_point_id: number
+          access_point_name: string
+          access_point_position: number
+        }[]
+      }
       get_access_hubs: {
         Args: { customer_id: string }
         Returns: {

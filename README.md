@@ -28,6 +28,7 @@
 - pnpm add pg
 - pnpm add -D @types/pg
 - pnpm add remeda
+- pnpm add tiny-invariant
 
 ## Supabase CLI
 
