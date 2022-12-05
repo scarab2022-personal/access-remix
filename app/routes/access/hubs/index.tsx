@@ -1,5 +1,4 @@
 import type { LoaderFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { MapPinIcon } from "@heroicons/react/24/solid";
@@ -8,23 +7,17 @@ import { PageHeader } from "~/components/page-header";
 import { Badge } from "~/components/badge";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import type { Database } from "db_types";
-import { createServerClient } from "@supabase/auth-helpers-remix";
+import { requireAppRole } from "~/utils";
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
-// function getLoaderData({ userId }: { userId: User["id"] }) {
-//   return prisma.accessHub.findMany({
-//     where: {
-//       user: { id: userId },
-//     },
-//     orderBy: { name: "asc" },
-//   });
-// }
-
-async function getLoaderData(
-  { customerId }: { customerId: User["id"] },
-  supabaseClient: SupabaseClient<Database>
-) {
+async function getLoaderData({
+  customerId,
+  supabaseClient,
+}: {
+  customerId: User["id"];
+  supabaseClient: SupabaseClient<Database>;
+}) {
   const { data: mistypedData, error } = await supabaseClient.rpc(
     "get_access_hubs",
     {
@@ -38,41 +31,14 @@ async function getLoaderData(
   return { accessHubs: data };
 }
 
-// export const loader: LoaderFunction = async ({ request }) => {
-//   const userId = await requireUserIdForRole(request, "customer");
-//   const accessHubs = await getLoaderData({ userId });
-//   return json<LoaderData>({ accessHubs });
-// };
-
-export const loader: LoaderFunction = async ({
-  request,
-}: {
-  request: Request;
-}) => {
-  const response = new Response();
-
-  const supabaseClient = createServerClient<Database>(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
-    { request, response }
-  );
-
-  const {
-    data: { session },
-  } = await supabaseClient.auth.getSession();
-
-  const user = session?.user;
-  if (!user) {
-    return redirect("/", {
-      headers: response.headers, // for set-cookie
-    });
-  }
-
-  const data = await getLoaderData({ customerId: user.id }, supabaseClient);
-  console.log({ data });
-
+export const loader: LoaderFunction = async ({ request }) => {
+  const { user, headers, supabaseClient } = await requireAppRole({
+    request,
+    appRole: "customer",
+  });
+  const data = await getLoaderData({ customerId: user.id, supabaseClient });
   return json<LoaderData>(data, {
-    headers: response.headers, // for set-cookie
+    headers, // for set-cookie
   });
 };
 

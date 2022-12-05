@@ -1,13 +1,13 @@
 import * as R from "remeda";
 import type { LoaderFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData, useLocation } from "@remix-run/react";
-import { createServerClient } from "@supabase/auth-helpers-remix";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import type { Database } from "db_types";
 import React from "react";
 import { PageHeader } from "~/components/page-header";
 import { Switch } from "~/components/switch";
+import { requireAppRole } from "~/utils";
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
@@ -27,10 +27,13 @@ type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
              4 │ Hub 2 │ ¤            │              16 │ Point 4           │                     4 │     2 │    1
 */
 
-async function getLoaderData(
-  { customerId }: { customerId: User["id"] },
-  supabaseClient: SupabaseClient<Database>
-) {
+async function getLoaderData({
+  customerId,
+  supabaseClient,
+}: {
+  customerId: User["id"];
+  supabaseClient: SupabaseClient<Database>;
+}) {
   const { data: mistypedData, error } = await supabaseClient.rpc(
     "get_grant_deny_stats",
     {
@@ -104,34 +107,14 @@ async function getLoaderData(
   return { stats };
 }
 
-export const loader: LoaderFunction = async ({
-  request,
-}: {
-  request: Request;
-}) => {
-  const response = new Response();
-
-  const supabaseClient = createServerClient<Database>(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
-    { request, response }
-  );
-
-  const {
-    data: { session },
-  } = await supabaseClient.auth.getSession();
-
-  const user = session?.user;
-  if (!user) {
-    return redirect("/", {
-      headers: response.headers, // for set-cookie
-    });
-  }
-
-  const data = await getLoaderData({ customerId: user.id }, supabaseClient);
-
+export const loader: LoaderFunction = async ({ request }) => {
+  const { user, headers, supabaseClient } = await requireAppRole({
+    request,
+    appRole: "customer",
+  });
+  const data = await getLoaderData({ customerId: user.id, supabaseClient });
   return json<LoaderData>(data, {
-    headers: response.headers, // for set-cookie
+    headers, // for set-cookie
   });
 };
 
