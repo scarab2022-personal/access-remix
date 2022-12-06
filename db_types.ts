@@ -183,6 +183,20 @@ export interface Database {
           heartbeat_at: string
         }[]
       }
+      get_access_point_with_hub_and_users: {
+        Args: { access_point_id: number; customer_id: string }
+        Returns: {
+          access_point_id: number
+          name: string
+          description: string
+          position: number
+          access_hub_name: string
+          access_user_id: number
+          access_user_name: string
+          access_user_description: string
+          access_user_code: string
+        }[]
+      }
       get_grant_deny_stats: {
         Args: { customer_id: string }
         Returns: {
