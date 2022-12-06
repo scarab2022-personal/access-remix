@@ -9,91 +9,74 @@ import { useEffect, useState } from "react";
 import { StackedList } from "~/components/stacked-list";
 import { Badge } from "~/components/badge";
 import { requireAppRole } from "~/utils";
-import { SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "db_types";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "db_types";
 
 export const handle = {
   breadcrumb: "Activity",
 };
 
-// type LoaderData = {
-//   accessHub: Awaited<ReturnType<typeof getAccessHub>>;
-//   accessEvents: Awaited<ReturnType<typeof getAccessEvents>>;
-//   cursorId?: AccessEvent["id"];
-// };
-
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
 async function getLoaderData({
-    access_hub_id,
-    customer_id,
-    cursor_id,
-    take,
-    supabaseClient,
-  }: Database["public"]["Functions"]["get_access_hub_events"]["Args"] & {
-    supabaseClient: SupabaseClient<Database>;
-  }) {
-    const { data: mistypedData, error } = await supabaseClient.rpc(
-      "get_access_hub_events",
-      {
-        access_hub_id,
-        customer_id,
-        cursor_id,
-        take
-      }
-    );
-    if (error) throw error;
-    // Supabase seems to be adding an extra array dimension.
-    const data = mistypedData as unknown as typeof mistypedData[number];
-  
-    return { results: data };
+  access_hub_id,
+  customer_id,
+  cursor_id,
+  take,
+  supabaseClient,
+}: Database["public"]["Functions"]["get_access_hub_events"]["Args"] & {
+  supabaseClient: SupabaseClient<Database>;
+}) {
+  const { data: mistypedHubResults, error: hubError } =
+    await supabaseClient.rpc("get_access_hub", { access_hub_id, customer_id });
+  if (hubError) throw hubError;
+  // Supabase seems to be adding an extra array dimension.
+  const hubResults =
+    mistypedHubResults as unknown as typeof mistypedHubResults[number];
+  if (hubResults.length !== 1) {
+    throw new Error("Invalid access hub");
   }
-  
 
-export const loader: LoaderFunction = async ({
-  request,
-  params: { accessHubId },
-}) => {
+  const { data: mistypedAccessEvents, error: accessEventsError } =
+    await supabaseClient.rpc("get_access_hub_events", {
+      access_hub_id,
+      customer_id,
+      cursor_id: cursor_id > 0 ? cursor_id : (null as unknown as number), //hack
+      take,
+    });
+  if (accessEventsError) throw accessEventsError;
+  // Supabase seems to be adding an extra array dimension.
+  const accessEvents =
+    mistypedAccessEvents as unknown as typeof mistypedAccessEvents[number];
+
+  return {
+    accessHub: hubResults[0],
+    accessEvents,
+    cursorId:
+      accessEvents.length === take
+        ? accessEvents.at(-1)?.access_event_id
+        : undefined,
+  };
+}
+
+export const loader: LoaderFunction = async ({ request, params }) => {
   const { user, headers, supabaseClient } = await requireAppRole({
     request,
     appRole: "customer",
   });
-  invariant(accessHubId, "accessHubId not found");
-  const accessHub = await getAccessHub({
-    id: accessHubId,
-    userId,
-  });
-
+  invariant(params.accessHubId, "accessHubId not found");
   const url = new URL(request.url);
   const cursorIdString = url.searchParams.get("cursorId");
   const cursorId = Number(cursorIdString);
-  const cursor = Number.isNaN(cursorId)
-    ? null
-    : await prisma.accessEvent.findFirst({
-        where: {
-          id: cursorId,
-          accessPoint: {
-            accessHub: { id: accessHubId },
-          },
-        },
-      });
-
-  const TAKE = 10;
-  const accessEvents = await getAccessEvents({
-    accessHubId,
-    cursor,
-    take: TAKE,
+  const data = await getLoaderData({
+    access_hub_id: Number(params.accessHubId),
+    customer_id: user.id,
+    cursor_id: cursorId,
+    take: 10,
+    supabaseClient,
   });
-
-  const newCursorId =
-    accessEvents.length === TAKE
-      ? accessEvents[accessEvents.length - 1].id
-      : undefined;
-
-  return json<LoaderData>({
-    accessHub,
-    accessEvents,
-    cursorId: newCursorId,
+  return json<LoaderData>(data, {
+    headers, // for set-cookie
   });
 };
 
@@ -127,10 +110,10 @@ export default function RouteComponent() {
           <Section.Body>
             <StackedList className="mx-auto max-w-sm">
               {accessEvents.map((i) => (
-                <li key={i.id} className="p-4 sm:px-6">
+                <li key={i.access_event_id} className="p-4 sm:px-6">
                   <div className="flex items-center justify-between">
                     <p className="truncate text-sm font-medium text-indigo-600">
-                      {i.accessPoint.name}
+                      {i.access_point_name}
                     </p>
                     <Badge
                       className="uppercase"
@@ -144,7 +127,7 @@ export default function RouteComponent() {
                   <div className="mt-2 flex items-center justify-between text-sm text-gray-500">
                     <p>{new Date(i.at).toLocaleString()}</p>
                     <p className="truncate">
-                      {i.accessUser ? i.accessUser.name : i.code}
+                      {i.access_user_name ? i.access_user_name : i.code}
                     </p>
                   </div>
                 </li>
