@@ -144,6 +144,23 @@ export interface Database {
           heartbeat_at: string
         }[]
       }
+      get_access_hub_events: {
+        Args: {
+          access_hub_id: number
+          customer_id: string
+          cursor_id: number
+          take: number
+        }
+        Returns: {
+          access_event_id: number
+          at: string
+          access: string
+          code: string
+          access_user_name: string
+          access_point_id: number
+          access_point_name: string
+        }[]
+      }
       get_access_hub_with_points: {
         Args: { access_hub_id: number; customer_id: string }
         Returns: {

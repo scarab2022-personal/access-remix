@@ -27,15 +27,19 @@ type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 async function getLoaderData({
     access_hub_id,
     customer_id,
+    cursor_id,
+    take,
     supabaseClient,
-  }: Database["public"]["Functions"]["get_access_hub_with_points"]["Args"] & {
+  }: Database["public"]["Functions"]["get_access_hub_events"]["Args"] & {
     supabaseClient: SupabaseClient<Database>;
   }) {
     const { data: mistypedData, error } = await supabaseClient.rpc(
-      "get_access_hub_with_points",
+      "get_access_hub_events",
       {
         access_hub_id,
         customer_id,
+        cursor_id,
+        take
       }
     );
     if (error) throw error;
