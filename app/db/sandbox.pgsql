@@ -63,7 +63,9 @@ security definer set search_path = public, pg_temp;
 -- from get_access_hub_events (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 \set access_hub_id 3
 \set customer_id '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e'
-\set cursor_id 66
+-- \set cursor_id 66
+-- \set cursor_id null
+\set cursor_id 77
 select ae.*
 from access_event ae
     join access_point ap using (access_point_id)
@@ -120,7 +122,8 @@ with cursor as (
         from access_event ae
             join access_point ap using (access_point_id)
             join access_hub ah using (access_hub_id)
-        where ah.access_hub_id = :access_hub_id
+        where :cursor_id is null
+            and ah.access_hub_id = :access_hub_id
             and ah.customer_id = :'customer_id'
         order by ae.at desc, ae.access_event_id desc
         limit 1) t
@@ -129,5 +132,14 @@ limit 1
 select *
 from cursor;
 
+-- select ae.access_event_id,
+--     ae.at,
+--     ap.access_hub_id
+-- from access_event ae
+--     join access_point ap using (access_point_id)
+-- where ae.access_event_id < 72
+-- order by ae.at desc,
+--     ae.access_event_id desc
+-- limit 10;
 rollback;
 
