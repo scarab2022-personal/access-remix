@@ -232,6 +232,20 @@ export interface Database {
         }
         Returns: { access_hub_id: number; name: string; description: string }[]
       }
+      update_access_point: {
+        Args: {
+          access_point_id: number
+          access_hub_id: number
+          customer_id: string
+          name: string
+          description: string
+        }
+        Returns: {
+          access_point_id: number
+          name: string
+          description: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

@@ -95,19 +95,22 @@ export const action: ActionFunction = async ({
     );
   }
 
-  // TODO: Ensure user owns access point before updating.  Put in transaction?
-  //   getAccessPoint({
-  //     id: Number(params.accessPointId),
-  //     accessHubId: params.accessHubId,
-  //     userId,
-  //   });
-  //   await prisma.accessPoint.update({
-  //     where: { id: Number(params.accessPointId) },
-  //     data: {
-  //       name: parseResult.data.name,
-  //       description: parseResult.data.description,
-  //     },
-  //   });
+  const { data: mistypedData, error } = await supabaseClient.rpc(
+    "update_access_point",
+    {
+      access_point_id: Number(accessPointId),
+      access_hub_id: Number(accessHubId),
+      customer_id: user.id,
+      name: parseResult.data.name,
+      description: parseResult.data.description,
+    }
+  );
+  if (error) throw error;
+  // Supabase seems to be adding an extra array dimension.
+  const data = mistypedData as unknown as typeof mistypedData[number];
+  if (data.length !== 1) {
+    throw new Error("Invalid access point");
+  }
 
   return redirect(`/access/hubs/${accessHubId}/points/${accessPointId}`, {
     headers,
