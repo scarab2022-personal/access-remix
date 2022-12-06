@@ -41,14 +41,17 @@ async function getLoaderData({
   return { results: data };
 }
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader: LoaderFunction = async ({
+  request,
+  params: { accessHubId },
+}) => {
   const { user, headers, supabaseClient } = await requireAppRole({
     request,
     appRole: "customer",
   });
-  invariant(params.accessHubId, "accessHubId not found");
+  invariant(accessHubId, "accessHubId not found");
   const data = await getLoaderData({
-    access_hub_id: Number(params.accessHubId),
+    access_hub_id: Number(accessHubId),
     customer_id: user.id,
     supabaseClient,
   });

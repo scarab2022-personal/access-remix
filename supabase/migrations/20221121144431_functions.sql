@@ -1,3 +1,25 @@
+-- select * from update_access_hub (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e', 'Hub 1a', 'This is hub 1a');
+create or replace function update_access_hub (access_hub_id access_hub.access_hub_id%type, customer_id auth.users.id%type, name access_hub.name%type, description access_hub.description%type)
+    returns table (
+        access_hub_id access_hub.access_hub_id%type,
+        name access_hub.name%type,
+        description access_hub.description%type
+    )
+    as $$
+    update
+        access_hub
+    set name = $3,
+        description = $4
+    where access_hub_id = $1
+        and customer_id = $2
+    returning access_hub_id,
+        name,
+        description;
+
+$$
+language sql
+security definer set search_path = public, pg_temp;
+
 -- select * from get_access_hub (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 create or replace function get_access_hub (access_hub_id access_hub.access_hub_id%type, customer_id auth.users.id%type)
     returns table (

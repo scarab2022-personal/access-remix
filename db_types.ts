@@ -196,6 +196,15 @@ export interface Database {
           deny: number
         }[]
       }
+      update_access_hub: {
+        Args: {
+          access_hub_id: number
+          customer_id: string
+          name: string
+          description: string
+        }
+        Returns: { access_hub_id: number; name: string; description: string }[]
+      }
     }
     Enums: {
       [_ in never]: never
