@@ -1,10 +1,11 @@
-import type { ActionFunction} from "@remix-run/node";
+import type { ActionFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useActionData } from "@remix-run/react";
 import type { ZodError } from "zod";
 import { z } from "zod";
 import { Form } from "~/components/form";
 import { PageHeader } from "~/components/page-header";
+import { requireAppRole } from "~/utils";
 
 export const handle = {
   breadcrumb: "Create",
@@ -23,7 +24,10 @@ type ActionData = {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const userId = await requireUserIdForRole(request, "customer");
+  const { user, headers, supabaseClient } = await requireAppRole({
+    request,
+    appRole: "customer",
+  });
 
   // WARNING: Object.fromEntries(formData): if formData.entries() has 2 entries with the same key, only 1 is taken.
   const fieldValues = Object.fromEntries(await request.formData());
@@ -33,19 +37,32 @@ export const action: ActionFunction = async ({ request }) => {
       {
         formErrors: parseResult.error.formErrors,
       },
-      { status: 400 }
+      { status: 400, headers }
     );
   }
 
-  const { name, description, code } = parseResult.data;
-  const accessUser = await createAccessUser({
-    name,
-    description,
-    code,
-    userId,
-  });
+  //   const { name, description, code } = parseResult.data;
+  //   const accessUser = await createAccessUser({
+  //     name,
+  //     description,
+  //     code,
+  //     userId,
+  //   });
 
-  return redirect(`/access/users/${accessUser.id}`);
+  const { data: mistypedData, error } = await supabaseClient.rpc(
+    "create_access_user",
+    {
+      name: parseResult.data.name,
+      description: parseResult.data.description,
+      code: parseResult.data.code,
+      customer_id: user.id,
+    }
+  );
+  if (error) throw error;
+  // Supabase seems to be adding an extra array dimension.
+  const data = mistypedData as unknown as typeof mistypedData[number];
+
+  return redirect(`/access/users/${data[0].access_user_id}`);
 };
 
 export default function RouteComponent() {
