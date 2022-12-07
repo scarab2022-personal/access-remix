@@ -7,8 +7,8 @@ import invariant from "tiny-invariant";
 import { PageHeader } from "~/components/page-header";
 import { Form } from "~/components/form";
 import { requireAppRole } from "~/utils";
-import { Database } from "db_types";
-import { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "db_types";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export const handle = {
   breadcrumb: "Edit",

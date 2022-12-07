@@ -210,6 +210,10 @@ export interface Database {
           access_user_code: string
         }[]
       }
+      get_access_users_not_connected_to_point: {
+        Args: { access_point_id: number; customer_id: string }
+        Returns: { access_user_id: number; name: string }[]
+      }
       get_grant_deny_stats: {
         Args: { customer_id: string }
         Returns: {
