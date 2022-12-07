@@ -11,7 +11,9 @@
     "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
     "format": "prettier --write .",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "db:reset": "pnpm supabase db reset",
+    "typegen": "pnpm supabase gen types typescript --local > db_types.ts"
   },
   "prettier": {},
   "eslintIgnore": [

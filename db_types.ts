@@ -135,6 +135,14 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      connect_access_points_and_users: {
+        Args: {
+          access_point_ids: number[]
+          access_user_ids: number[]
+          customer_id: string
+        }
+        Returns: { access_point_id: number; access_user_id: number }[]
+      }
       get_access_hub: {
         Args: { access_hub_id: number; customer_id: string }
         Returns: {
