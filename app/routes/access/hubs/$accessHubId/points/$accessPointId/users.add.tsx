@@ -71,28 +71,23 @@ export const action: ActionFunction = async ({
   // WARNING: Object.fromEntries(formData): if formData.entries() has 2 entries with the same key, only 1 is taken.
   const fieldValues = Object.fromEntries(formData);
 
-  let ids = [];
+  let access_user_ids = [];
   for (let idx = 0; fieldValues[`accessUser-${idx}-id`]; ++idx) {
     if (fieldValues[`accessUser-${idx}`]) {
-      ids.push(Number(fieldValues[`accessUser-${idx}-id`]));
+      access_user_ids.push(Number(fieldValues[`accessUser-${idx}-id`]));
     }
   }
-  if (ids.length > 0) {
-    
+  if (access_user_ids.length > 0) {
+    const { error } = await supabaseClient.rpc(
+      "connect_access_points_and_users",
+      {
+        access_point_ids: [Number(accessPointId)],
+        access_user_ids,
+        customer_id: user.id,
+      }
+    );
+    if (error) throw error;
   }
-  //   if (ids.length > 0) {
-  //     const accessPoint = await getAccessPoint({
-  //       id: Number(accessPointId),
-  //       accessHubId,
-  //       userId,
-  //     });
-
-  //     // TODO: validate the access user id's: that they belong to the user
-  //     await prisma.accessPoint.update({
-  //       where: { id: accessPoint.id },
-  //       data: { accessUsers: { connect: ids.map((id) => ({ id })) } },
-  //     });
-  //   }
   return redirect(`/access/hubs/${accessHubId}/points/${accessPointId}`, {
     headers,
   });
