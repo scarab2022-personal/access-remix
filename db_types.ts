@@ -143,6 +143,15 @@ export interface Database {
         }
         Returns: { access_point_id: number; access_user_id: number }[]
       }
+      create_access_user: {
+        Args: {
+          name: string
+          description: string
+          code: string
+          customer_id: string
+        }
+        Returns: { access_user_id: number }[]
+      }
       disconnect_access_points_and_users: {
         Args: {
           access_point_ids: number[]
@@ -226,6 +235,30 @@ export interface Database {
           access_user_code: string
         }[]
       }
+      get_access_user_with_points: {
+        Args: { access_user_id: number; customer_id: string }
+        Returns: {
+          access_user_id: number
+          name: string
+          description: string
+          code: string
+          activate_code_at: string
+          expire_code_at: string
+          access_point_id: number
+          access_point_name: string
+        }[]
+      }
+      get_access_users: {
+        Args: { customer_id: string }
+        Returns: {
+          access_user_id: number
+          name: string
+          description: string
+          code: string
+          activate_code_at: string
+          expire_code_at: string
+        }[]
+      }
       get_access_users_not_connected_to_point: {
         Args: { access_point_id: number; customer_id: string }
         Returns: { access_user_id: number; name: string }[]
@@ -242,6 +275,10 @@ export interface Database {
           grant: number
           deny: number
         }[]
+      }
+      soft_delete_access_user: {
+        Args: { access_user_id: number; customer_id: string }
+        Returns: { access_user_id: number; deleted_at: string }[]
       }
       update_access_hub: {
         Args: {
@@ -265,6 +302,18 @@ export interface Database {
           name: string
           description: string
         }[]
+      }
+      update_access_user: {
+        Args: {
+          access_user_id: number
+          customer_id: string
+          name: string
+          description: string
+          code: string
+          activate_code_at: string
+          expire_code_at: string
+        }
+        Returns: { access_user_id: number }[]
       }
     }
     Enums: {
