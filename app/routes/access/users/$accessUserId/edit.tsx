@@ -164,6 +164,12 @@ export const action: ActionFunction = async ({
 
   const { name, description, code, activateCodeAtHidden, expireCodeAtHidden } =
     parseResult.data;
+  const activate_code_at = activateCodeAtHidden
+    ? activateCodeAtHidden.toISOString()
+    : (null as unknown as string); // hack
+  const expire_code_at = expireCodeAtHidden
+    ? expireCodeAtHidden.toISOString()
+    : (null as unknown as string); // hack
   const { data: mistypedData, error } = await supabaseClient.rpc(
     "update_access_user",
     {
@@ -172,10 +178,8 @@ export const action: ActionFunction = async ({
       name,
       description,
       code,
-      activate_code_at: activateCodeAtHidden
-        ? activateCodeAtHidden.toString()
-        : "",
-      expire_code_at: expireCodeAtHidden ? expireCodeAtHidden.toString() : "",
+      activate_code_at,
+      expire_code_at,
     }
   );
   if (error) throw error;
