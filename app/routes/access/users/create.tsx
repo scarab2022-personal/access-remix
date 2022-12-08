@@ -41,14 +41,6 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  //   const { name, description, code } = parseResult.data;
-  //   const accessUser = await createAccessUser({
-  //     name,
-  //     description,
-  //     code,
-  //     userId,
-  //   });
-
   const { data: mistypedData, error } = await supabaseClient.rpc(
     "create_access_user",
     {
@@ -62,7 +54,7 @@ export const action: ActionFunction = async ({ request }) => {
   // Supabase seems to be adding an extra array dimension.
   const data = mistypedData as unknown as typeof mistypedData[number];
 
-  return redirect(`/access/users/${data[0].access_user_id}`);
+  return redirect(`/access/users/${data[0].access_user_id}`, { headers });
 };
 
 export default function RouteComponent() {

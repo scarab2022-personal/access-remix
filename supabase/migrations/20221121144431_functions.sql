@@ -294,7 +294,33 @@ $$
 language sql
 security definer set search_path = public, pg_temp;
 
--- select * from from get_access_user_with_points (4, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
+-- select * from get_access_user (4, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
+create or replace function get_access_user (access_user_id access_user.access_user_id%type, customer_id auth.users.id%type)
+    returns table (
+        access_user_id access_user.access_user_id%type,
+        name access_user.name%type,
+        description access_user.description%type,
+        code access_user.code%type,
+        activate_code_at access_user.activate_code_at%type,
+        expire_code_at access_user.expire_code_at%type
+    )
+    as $$
+    select access_user_id,
+        name,
+        description,
+        code,
+        activate_code_at,
+        expire_code_at
+    from access_user
+    where access_user_id = $1
+        and customer_id = $2
+        and deleted_at is null;
+
+$$
+language sql
+security definer set search_path = public, pg_temp;
+
+-- select * from get_access_user_with_points (4, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 create or replace function get_access_user_with_points (access_user_id access_user.access_user_id%type, customer_id auth.users.id%type)
     returns table (
         access_user_id access_user.access_user_id%type,
@@ -304,7 +330,9 @@ create or replace function get_access_user_with_points (access_user_id access_us
         activate_code_at access_user.activate_code_at%type,
         expire_code_at access_user.expire_code_at%type,
         access_point_id access_point.access_point_id%type,
-        access_point_name access_point.name%type
+        access_point_name access_point.name%type,
+        access_point_description access_point.description%type,
+        access_hub_name access_hub.name%type
     )
     as $$
     select access_user_id,
@@ -314,14 +342,18 @@ create or replace function get_access_user_with_points (access_user_id access_us
         au.activate_code_at,
         au.expire_code_at,
         ap.access_point_id,
-        ap.name
+        ap.name,
+        ap.description,
+        ah.name
     from access_user au
     left join access_point_to_access_user a2u using (access_user_id)
     left join access_point ap using (access_point_id)
+    left join access_hub ah using (access_hub_id)
 where access_user_id = $1
-    and customer_id = $2
+    and au.customer_id = $2
     and deleted_at is null
-order by ap.name;
+order by ap.name,
+    ah.name;
 
 $$
 language sql

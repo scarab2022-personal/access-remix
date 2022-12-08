@@ -235,6 +235,17 @@ export interface Database {
           access_user_code: string
         }[]
       }
+      get_access_user: {
+        Args: { access_user_id: number; customer_id: string }
+        Returns: {
+          access_user_id: number
+          name: string
+          description: string
+          code: string
+          activate_code_at: string
+          expire_code_at: string
+        }[]
+      }
       get_access_user_with_points: {
         Args: { access_user_id: number; customer_id: string }
         Returns: {
@@ -246,6 +257,8 @@ export interface Database {
           expire_code_at: string
           access_point_id: number
           access_point_name: string
+          access_point_description: string
+          access_hub_name: string
         }[]
       }
       get_access_users: {
