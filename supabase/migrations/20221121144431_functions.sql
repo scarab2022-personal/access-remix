@@ -236,6 +236,38 @@ $$
 language sql
 security definer set search_path = public, pg_temp;
 
+-- select * from get_access_points_not_connected_to_user (6, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
+create or replace function get_access_points_not_connected_to_user (access_user_id access_user.access_user_id%type, customer_id auth.users.id%type)
+    returns table (
+        access_point_id access_point.access_point_id%type,
+        name access_point.name%type,
+        access_hub_name access_hub.name%type
+    )
+    as $$
+    with access_point_ids as (
+        select ap.access_point_id
+        from access_point ap
+            join access_point_to_access_user p2u using (access_point_id)
+            join access_hub ah using (access_hub_id)
+        where p2u.access_user_id = $1
+            and ah.customer_id = $2
+)
+    select ap.access_point_id,
+        ap.name,
+        ah.name
+    from access_point ap
+        join access_hub ah using (access_hub_id)
+    where ah.customer_id = $2
+        and access_point_id not in (
+            select *
+            from access_point_ids)
+    order by ah.name,
+        ap.name;
+
+$$
+language sql
+security definer set search_path = public, pg_temp;
+
 -- select * from create_access_user ('slim', 'caretaker', '555', '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 create or replace function create_access_user (name access_user.name%type, description access_user.description%type, code access_user.code%type, customer_id auth.users.id%type)
     returns table (

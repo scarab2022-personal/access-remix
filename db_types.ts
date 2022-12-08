@@ -235,6 +235,14 @@ export interface Database {
           access_user_code: string
         }[]
       }
+      get_access_points_not_connected_to_user: {
+        Args: { access_user_id: number; customer_id: string }
+        Returns: {
+          access_point_id: number
+          name: string
+          access_hub_name: string
+        }[]
+      }
       get_access_user: {
         Args: { access_user_id: number; customer_id: string }
         Returns: {
