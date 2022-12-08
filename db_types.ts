@@ -284,6 +284,24 @@ export interface Database {
         Args: { access_point_id: number; customer_id: string }
         Returns: { access_user_id: number; name: string }[]
       }
+      get_customer: {
+        Args: { customer_id: string }
+        Returns: {
+          customer_id: string
+          email: string
+          created_at: string
+          last_sign_in_at: string
+        }[]
+      }
+      get_customers: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          customer_id: string
+          email: string
+          created_at: string
+          last_sign_in_at: string
+        }[]
+      }
       get_grant_deny_stats: {
         Args: { customer_id: string }
         Returns: {

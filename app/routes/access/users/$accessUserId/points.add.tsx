@@ -5,8 +5,8 @@ import invariant from "tiny-invariant";
 import { PageHeader } from "~/components/page-header";
 import { Form } from "~/components/form";
 import { Checkbox } from "~/components/checkbox";
-import { Database } from "db_types";
-import { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "db_types";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireAppRole } from "~/utils";
 
 export const handle = {

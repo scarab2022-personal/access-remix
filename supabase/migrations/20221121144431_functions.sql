@@ -1,3 +1,44 @@
+-- select * from get_customer('733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
+create or replace function get_customer (customer_id auth.users.id%type)
+    returns table (
+        customer_id auth.users.id%type,
+        email auth.users.email%type,
+        created_at auth.users.created_at%type,
+        last_sign_in_at auth.users.last_sign_in_at%type
+    )
+    as $$
+    select id,
+        email,
+        created_at,
+        last_sign_in_at
+    from auth.users
+    where id = $1
+        and raw_user_meta_data @> '{"appRole": "customer"}'::jsonb
+$$
+language sql
+security definer set search_path = public, pg_temp;
+
+-- select * from get_customers();
+create or replace function get_customers ()
+    returns table (
+        customer_id auth.users.id%type,
+        email auth.users.email%type,
+        created_at auth.users.created_at%type,
+        last_sign_in_at auth.users.last_sign_in_at%type
+    )
+    as $$
+    select id,
+        email,
+        created_at,
+        last_sign_in_at
+    from auth.users
+    where raw_user_meta_data @> '{"appRole": "customer"}'::jsonb
+    order by email;
+
+$$
+language sql
+security definer set search_path = public, pg_temp;
+
 -- select * from update_access_hub (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e', 'Hub 1a', 'This is hub 1a');
 create or replace function update_access_hub (access_hub_id access_hub.access_hub_id%type, customer_id auth.users.id%type, name access_hub.name%type, description access_hub.description%type)
     returns table (
@@ -131,7 +172,6 @@ $$
 language sql
 security definer set search_path = public, pg_temp;
 
--- select * from get_access_hub_with_points (3, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 -- select * from get_access_hubs ('733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
 create or replace function get_access_hubs (customer_id auth.users.id%type)
     returns table (

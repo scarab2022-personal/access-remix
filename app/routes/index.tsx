@@ -1,37 +1,9 @@
-import type { LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import {
-  Link,
-  useLoaderData,
-  useNavigate,
-  useOutletContext,
-} from "@remix-run/react";
-import { createServerClient } from "@supabase/auth-helpers-remix";
+import { Link, useOutletContext } from "@remix-run/react";
 import type { ContextType } from "~/root";
 import doorHref from "~/assets/door.jpg";
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const response = new Response();
-  const supabaseClient = createServerClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
-    { request, response }
-  );
-  const { data, error } = await supabaseClient.auth.getSession();
-  if (error) throw error;
-  return json(
-    { dt: new Date(), data },
-    {
-      headers: response.headers,
-    }
-  );
-};
-
 export default function Index() {
-  const loaderData = useLoaderData();
-  const { supabase, session } = useOutletContext<ContextType>();
-  const user = null;
-  const navigate = useNavigate();
+  const { session } = useOutletContext<ContextType>();
   return (
     <main className="lg:relative">
       <div className="mx-auto w-full max-w-7xl pt-16 pb-20 text-center lg:py-48 lg:text-left">
@@ -44,16 +16,16 @@ export default function Index() {
           </h1>
           <div className="mt-10 sm:flex sm:justify-center lg:justify-start">
             {session ? (
-                <Link
-                  to={
-                    session.user.user_metadata.appRole === "admin"
-                      ? "/admin/dashboard"
-                      : "/access/dashboard"
-                  }
-                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 md:py-4 md:px-10 md:text-lg"
-                >
-                  Enter
-                </Link>
+              <Link
+                to={
+                  session.user.user_metadata.appRole === "admin"
+                    ? "/admin/dashboard"
+                    : "/access/dashboard"
+                }
+                className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 md:py-4 md:px-10 md:text-lg"
+              >
+                Enter
+              </Link>
             ) : (
               <>
                 <div className="rounded-md shadow">
@@ -84,25 +56,6 @@ export default function Index() {
           alt=""
         />
       </div>
-
-      {/* <div className="min-h-full mx-auto max-w-sm p-8">
-        <div className="flex justify-between mt-3">
-          <Link to="signin">Sign In</Link>
-          <Link
-            to="logout"
-            onClick={async (e) => {
-              e.preventDefault();
-              await supabase?.auth.signOut();
-              navigate("/");
-            }}
-          >
-            Sign Out
-          </Link>
-        </div>
-        <pre className="mt-3">
-          {JSON.stringify({ loaderData, session }, null, 2)}
-        </pre>
-      </div> */}
     </main>
   );
 }

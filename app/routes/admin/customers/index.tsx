@@ -1,0 +1,67 @@
+import type { LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { Table } from "~/components/table";
+import { PageHeader } from "~/components/page-header";
+import { requireAppRole } from "~/utils";
+import type { Database } from "db_types";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
+
+async function getLoaderData({
+  supabaseClient,
+}: {
+  supabaseClient: SupabaseClient<Database>;
+}) {
+  const { data: mistypedData, error } = await supabaseClient.rpc(
+    "get_customers",
+    {}
+  );
+  if (error) throw error;
+  // Supabase seems to be adding an extra array dimension.
+  const data = mistypedData as unknown as typeof mistypedData[number];
+
+  return { customers: data };
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const { headers, supabaseClient } = await requireAppRole({
+    request,
+    appRole: "admin",
+  });
+  const data = await getLoaderData({
+    supabaseClient,
+  });
+  return json<LoaderData>(data, {
+    headers, // for set-cookie
+  });
+};
+
+export default function RouteComponent() {
+  const { customers } = useLoaderData<LoaderData>();
+  return (
+    <>
+      <PageHeader title="Customers" />
+      <main>
+        <Table
+          headers={
+            <>
+              <Table.Th>Email</Table.Th>
+              <Table.Th>Created At</Table.Th>
+              <Table.Th sr>View</Table.Th>
+            </>
+          }
+        >
+          {customers.map((i) => (
+            <tr key={i.customer_id}>
+              <Table.Td prominent>{i.email}</Table.Td>
+              <Table.Td>{new Date(i.created_at).toLocaleDateString()}</Table.Td>
+              <Table.TdLink to={`${i.customer_id}`}>View</Table.TdLink>
+            </tr>
+          ))}
+        </Table>
+      </main>
+    </>
+  );
+}
