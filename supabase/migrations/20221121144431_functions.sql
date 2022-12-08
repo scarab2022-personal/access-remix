@@ -590,3 +590,32 @@ $$
 language sql
 security definer set search_path = public, pg_temp;
 
+-- k
+create or replace function get_admin_stats ()
+    returns table (
+        customer bigint,
+        access_hub bigint,
+        "grant" bigint,
+        deny bigint
+    )
+    as $$
+    select (
+            select count(*)
+            from auth.users
+            where raw_user_meta_data @> '{"appRole": "customer"}'::jsonb),
+        (
+            select count(*)
+            from access_hub),
+    (
+        select count(*)
+        from access_event
+        where access = 'grant'),
+    (
+        select count(*)
+        from access_event
+        where access = 'deny');
+
+$$
+language sql
+security definer set search_path = public, pg_temp;
+

@@ -10,34 +10,19 @@ begin;
 \set access_user_ids array[3, 4, 5, 6, 7]
 \set access_user_ids array[]::integer[]
  */
-/*
-select *
-from access_point_to_access_user
-where access_point_id in (9)
-order by access_point_id,
- access_user_id;
- */
--- delete from access_point_to_access_user
--- where access_user_id = 4;
--- select *
--- from get_access_user_with_points (4, '733e54ae-c9dc-4b9a-94d0-764fbd1bd76e');
-update
-    access_user
-set activate_code_at = now()
-where access_user_id = 4
-returning *;
-
-update
-    access_user
-set activate_code_at = '2022-12-08T01:26:14.750Z'
-where access_user_id = 4
-returning *;
-
-update
-    access_user
-set activate_code_at = '2022-12-09T01:28:00.000Z'
-where access_user_id = 4
-returning *;
+select (
+        select count(*)
+        from auth.users
+        where raw_user_meta_data @> '{"appRole": "customer"}'::jsonb) as customer,
+    (
+        select count(*)
+        from access_hub) as access_hub,
+    (
+        select count(*)
+        from access_event
+        where access = 'grant') as grant, (select count(*)
+    from access_event
+    where access = 'deny') as deny;
 
 rollback;
 
