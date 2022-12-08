@@ -22,9 +22,8 @@ import { PageHeader } from "~/components/page-header";
 import { Table } from "~/components/table";
 import { Section } from "~/components/section";
 import { DescriptionList } from "~/components/description-list";
-import { SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "db_types";
-import { result } from "lodash";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "db_types";
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
