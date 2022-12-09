@@ -98,6 +98,22 @@ series as (
 from series
     join access_user using (access_user_id)
 order by at;
+    -- create deny access events
+    with access_point_ids as (
+        select access_point_id,
+            row_number() over (order by access_point_id)
+        from access_point
+        join access_hub using (access_hub_id)
+    where customer_id = new.id)
+insert into access_event (at, access, code, access_point_id)
+select current_timestamp - i * interval '41 min',
+    'deny',
+    '666',
+    access_point_id
+from generate_series(1, 25) as t (i)
+    join access_point_ids on ((i - 1) % (
+            select count(*)
+            from access_point_ids) + 1) = row_number;
     return new;
 end;
 $$;
@@ -121,10 +137,6 @@ select *
 from access_user
 where customer_id = :'customer_id';
 
--- select p2u.*
--- from access_point_to_access_user p2u
---     join access_user au using (access_user_id)
--- where au.customer_id = :'customer_id';
 select ae.*
 from access_event ae
     join access_point using (access_point_id)

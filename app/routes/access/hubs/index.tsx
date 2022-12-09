@@ -7,7 +7,7 @@ import { PageHeader } from "~/components/page-header";
 import { Badge } from "~/components/badge";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import type { Database } from "db_types";
-import { requireAppRole } from "~/lib";
+import { requireAppRole } from "~/lib/utils";
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 

@@ -8,7 +8,7 @@ import { PageHeader } from "~/components/page-header";
 import { Form } from "~/components/form";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "db_types";
-import { requireAppRole } from "~/lib";
+import { requireAppRole } from "~/lib/utils";
 
 export const handle = {
   breadcrumb: "Edit",

@@ -17,13 +17,13 @@ import {
 import { Fragment } from "react";
 import { Button } from "~/components/button";
 import invariant from "tiny-invariant";
-import { classNames, requireAppRole } from "~/lib";
 import { PageHeader } from "~/components/page-header";
 import { Table } from "~/components/table";
 import { Section } from "~/components/section";
 import { DescriptionList } from "~/components/description-list";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "db_types";
+import { classNames, requireAppRole } from "~/lib/utils";
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 

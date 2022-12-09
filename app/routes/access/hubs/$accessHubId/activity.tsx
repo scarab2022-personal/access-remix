@@ -8,7 +8,7 @@ import { Button } from "~/components/button";
 import { useEffect, useState } from "react";
 import { StackedList } from "~/components/stacked-list";
 import { Badge } from "~/components/badge";
-import { requireAppRole } from "~/lib";
+import { requireAppRole } from "~/lib/utils";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "db_types";
 

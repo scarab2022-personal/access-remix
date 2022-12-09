@@ -13,7 +13,7 @@ import { PageHeader } from "~/components/page-header";
 import { Table } from "~/components/table";
 import { Section } from "~/components/section";
 import { DescriptionList } from "~/components/description-list";
-import { requireAppRole } from "~/lib";
+import { requireAppRole } from "~/lib/utils";
 import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 

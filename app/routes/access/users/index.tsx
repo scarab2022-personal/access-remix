@@ -6,7 +6,7 @@ import { MapPinIcon } from "@heroicons/react/24/solid";
 import { StackedList } from "~/components/stacked-list";
 import { PageHeader } from "~/components/page-header";
 import { Badge } from "~/components/badge";
-import { requireAppRole } from "~/lib";
+import { requireAppRole } from "~/lib/utils";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import type { Database } from "db_types";
 

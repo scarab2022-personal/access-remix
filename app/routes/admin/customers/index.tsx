@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Table } from "~/components/table";
 import { PageHeader } from "~/components/page-header";
-import { requireAppRole } from "~/lib";
+import { requireAppRole } from "~/lib/utils";
 import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 

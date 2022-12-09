@@ -3,10 +3,10 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link, useActionData, useSearchParams } from "@remix-run/react";
 import { createServerClient } from "@supabase/auth-helpers-remix";
-import { AuthResponse } from "@supabase/supabase-js";
+import type { AuthResponse } from "@supabase/supabase-js";
 import * as React from "react";
 import type { ZodError } from "zod";
 import { z } from "zod";
@@ -166,7 +166,6 @@ export default function SignUpPage() {
           <SignUpForm />
         )}
       </div>
-      <pre>{JSON.stringify({ actionData }, null, 2)}</pre>
     </div>
   );
 }

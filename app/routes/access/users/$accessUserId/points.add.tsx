@@ -7,7 +7,7 @@ import { Form } from "~/components/form";
 import { Checkbox } from "~/components/checkbox";
 import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { requireAppRole } from "~/lib";
+import { requireAppRole } from "~/lib/utils";
 
 export const handle = {
   breadcrumb: "Add Points",

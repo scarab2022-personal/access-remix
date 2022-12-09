@@ -31,81 +31,83 @@ insert into auth.users (instance_id, id, aud, role, email, encrypted_password, e
 insert into auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status, banned_until, reauthentication_token, reauthentication_sent_at)
     values ('00000000-0000-0000-0000-000000000000', 'b6d21aab-58ec-4122-be89-ca6355dc52f5', 'authenticated', 'authenticated', 'admin@access.com', '$2a$10$2GNivJp/KeQAPMYdkKNzNeZcquz2OPqYAPO31WlZ.23c3kSNNwh1q', '2022-10-24 18:45:28.991862+00', '2022-10-24 18:45:07.465984+00', '', '2022-10-24 18:45:07.465984+00', '', null, '', '', null, '2022-10-24 18:45:28.992415+00', '{"provider": "email", "providers": ["email"]}', '{"appRole": "admin"}', null, '2022-10-24 18:45:07.462593+00', '2022-10-24 19:35:24.908825+00', null, null, '', '', null, '', 0, NULL, '', null);
 
+
+/*
 insert into access_hub (name, description, customer_id)
 select 'Hub ' || hub_index,
-    'This is hub ' || hub_index,
-    id
+ 'This is hub ' || hub_index,
+ id
 from auth.users,
-    generate_series(1, 2) as t (hub_index)
+ generate_series(1, 2) as t (hub_index)
 where raw_user_meta_data @> '{"appRole": "customer"}'::jsonb
 order by email;
 
 insert into access_point (name, position, access_hub_id)
 select 'Point ' || position,
-    position,
-    access_hub_id
+ position,
+ access_hub_id
 from access_hub,
-    generate_series(1, 4) as t (position)
+ generate_series(1, 4) as t (position)
 order by access_hub_id;
 
 insert into access_user (name, code, customer_id)
 select name,
-    code,
-    id
+ code,
+ id
 from auth.users,
-    (
-        values ('master', '999'),
-            ('guest1', '111'),
-            ('guest2', '222')) t (name, code)
+ (
+ values ('master', '999'),
+ ('guest1', '111'),
+ ('guest2', '222')) t (name, code)
 where raw_user_meta_data @> '{"appRole": "customer"}'::jsonb
 order by email;
 
 insert into access_point_to_access_user (access_point_id, access_user_id)
 select access_point_id,
-    access_user_id
+ access_user_id
 from access_user
-    join access_hub using (customer_id)
-    join access_point using (access_hub_id)
+ join access_hub using (customer_id)
+ join access_point using (access_hub_id)
 where (access_user.name = 'master')
-    or (access_user.name = 'guest1'
-        and access_hub.name = 'Hub 1')
-    or (access_user.name = 'guest2'
-        and access_hub.name = 'Hub 2');
+ or (access_user.name = 'guest1'
+ and access_hub.name = 'Hub 1')
+ or (access_user.name = 'guest2'
+ and access_hub.name = 'Hub 2');
 
 with times as (
-    select i,
-        current_timestamp - i * interval '15 min' as at,
-        (i - 1) % (
-            select count(*)
-            from access_user) + 1 as access_user_id
-        from generate_series(1, 75) as t (i)),
-    series as (
-        select at,
-            i,
-            access_user_id,
-            array_agg(access_point_id) as access_point_ids
-        from times
-            join access_user using (access_user_id)
-            join access_point_to_access_user using (access_user_id)
-            join access_point using (access_point_id)
-        group by at, i, access_user_id
-        order by i)
-    insert into access_event (at, access, code, access_user_id, access_point_id)
-    select at,
-        'grant' as access,
-        code,
-        access_user_id,
-        access_point_ids[ceil(random() * array_length(access_point_ids, 1))] as access_point_id
+ select i,
+ current_timestamp - i * interval '15 min' as at,
+ (i - 1) % (
+ select count(*)
+ from access_user) + 1 as access_user_id
+ from generate_series(1, 75) as t (i)),
+ series as (
+ select at,
+ i,
+ access_user_id,
+ array_agg(access_point_id) as access_point_ids
+ from times
+ join access_user using (access_user_id)
+ join access_point_to_access_user using (access_user_id)
+ join access_point using (access_point_id)
+ group by at, i, access_user_id
+ order by i)
+ insert into access_event (at, access, code, access_user_id, access_point_id)
+ select at,
+ 'grant' as access,
+ code,
+ access_user_id,
+ access_point_ids[ceil(random() * array_length(access_point_ids, 1))] as access_point_id
 from series
-    join access_user using (access_user_id)
+ join access_user using (access_user_id)
 order by at;
 
 insert into access_event (at, access, code, access_point_id)
 select current_timestamp - i * interval '41 min' as at,
-    'deny',
-    '666',
-    (i - 1) % (
-        select count(*)
-        from access_point) + 1 as access_point_id
+ 'deny',
+ '666',
+ (i - 1) % (
+ select count(*)
+ from access_point) + 1 as access_point_id
 from generate_series(1, 25) as t (i);
-
+ */
