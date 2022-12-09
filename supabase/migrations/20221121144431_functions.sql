@@ -617,7 +617,26 @@ $$
 language sql
 security definer set search_path = public, pg_temp;
 
-create or replace function on_new_auth_user ()
+create or replace function on_new_auth_user_before ()
+    returns trigger
+    language plpgsql
+    security definer
+    set search_path = public, pg_temp
+    as $$
+begin
+    raise notice 'new auth user before: %, %, %', new.id, new.email, new.raw_user_meta_data;
+    if (new.raw_user_meta_data ->> 'appRole' = 'admin') then
+        return new;
+    end if;
+    -- hack
+    new.raw_user_meta_data = '{"appRole": "customer"}'::jsonb;
+    return new;
+end;
+$$;
+
+create or replace trigger on_new_auth_user_before before insert on auth.users for each row execute procedure on_new_auth_user_before ();
+
+create or replace function on_new_auth_user_after ()
     returns trigger
     language plpgsql
     security definer
@@ -626,8 +645,8 @@ create or replace function on_new_auth_user ()
 declare
     hub_ids int[];
 begin
-    -- raise notice 'new auth user: %, %, %', new.id, new.email, new.raw_user_meta_data ->> 'appRole';
-    if (new.raw_user_meta_data ->> 'appRole' <> 'customer') then
+    raise notice 'new auth user_after: %, %, %', new.id, new.email, new.raw_user_meta_data;
+    if (new.raw_user_meta_data ->> 'appRole' = 'admin') then
         return new;
     end if;
     -- create access hubs
@@ -641,7 +660,6 @@ insert into access_hub (name, description, customer_id)
 )
     select array_agg(access_hub_id)
     from hubs into hub_ids;
-    raise notice 'new auth user: hub_ids: %', hub_ids;
     -- create access points
     insert into access_point (name, position, access_hub_id)
     select 'Point ' || position,
@@ -702,13 +720,13 @@ series as (
     from series
         join access_user using (access_user_id)
     order by at;
-    -- create deny access events
-    with access_point_ids as (
-        select access_point_id,
-            row_number() over (order by access_point_id)
-        from access_point
-        join access_hub using (access_hub_id)
-    where customer_id = new.id)
+        -- create deny access events
+        with access_point_ids as (
+            select access_point_id,
+                row_number() over (order by access_point_id)
+            from access_point
+            join access_hub using (access_hub_id)
+        where customer_id = new.id)
 insert into access_event (at, access, code, access_point_id)
 select current_timestamp - i * interval '41 min',
     'deny',
@@ -718,9 +736,9 @@ from generate_series(1, 25) as t (i)
         join access_point_ids on ((i - 1) % (
                 select count(*)
                 from access_point_ids) + 1) = row_number;
-    return new;
+        return new;
 end;
 $$;
 
-create or replace trigger on_new_auth_user after insert on auth.users for each row execute procedure on_new_auth_user ();
+create or replace trigger on_new_auth_user_after after insert on auth.users for each row execute procedure on_new_auth_user_after ();
 
