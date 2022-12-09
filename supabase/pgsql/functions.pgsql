@@ -1,6 +1,6 @@
 begin;
 
-\ir ../../supabase/migrations/20221121144431_functions.sql
+\ir ../migrations/20221121144431_functions.sql
 select *
 from get_customers ();
 
