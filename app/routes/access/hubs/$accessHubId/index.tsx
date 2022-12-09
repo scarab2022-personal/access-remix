@@ -11,7 +11,7 @@ import { json } from "@remix-run/node";
 import { useLoaderData, Link, useNavigate } from "@remix-run/react";
 import { Button } from "~/components/button";
 import invariant from "tiny-invariant";
-import { classNames, requireAppRole } from "~/utils";
+import { classNames, requireAppRole } from "~/lib";
 import { PageHeader } from "~/components/page-header";
 import { Section } from "~/components/section";
 import { Table } from "~/components/table";

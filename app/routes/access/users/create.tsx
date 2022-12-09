@@ -5,7 +5,7 @@ import type { ZodError } from "zod";
 import { z } from "zod";
 import { Form } from "~/components/form";
 import { PageHeader } from "~/components/page-header";
-import { requireAppRole } from "~/utils";
+import { requireAppRole } from "~/lib";
 
 export const handle = {
   breadcrumb: "Create",

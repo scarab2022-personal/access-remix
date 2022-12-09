@@ -7,7 +7,7 @@ import { Form } from "~/components/form";
 import { Checkbox } from "~/components/checkbox";
 import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { requireAppRole } from "~/utils";
+import { requireAppRole } from "~/lib";
 
 export const handle = {
   breadcrumb: "Add Points",
@@ -16,26 +16,25 @@ export const handle = {
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
 async function getLoaderData({
-    access_user_id,
-    customer_id,
-    supabaseClient,
-  }: Database["public"]["Functions"]["get_access_points_not_connected_to_user"]["Args"] & {
-    supabaseClient: SupabaseClient<Database>;
-  }) {
-    const { data: mistypedData, error } = await supabaseClient.rpc(
-      "get_access_points_not_connected_to_user",
-      {
-        access_user_id,
-        customer_id,
-      }
-    );
-    if (error) throw error;
-    // Supabase seems to be adding an extra array dimension.
-    const data = mistypedData as unknown as typeof mistypedData[number];
-  
-    return { accessPoints: data };
-  }
-  
+  access_user_id,
+  customer_id,
+  supabaseClient,
+}: Database["public"]["Functions"]["get_access_points_not_connected_to_user"]["Args"] & {
+  supabaseClient: SupabaseClient<Database>;
+}) {
+  const { data: mistypedData, error } = await supabaseClient.rpc(
+    "get_access_points_not_connected_to_user",
+    {
+      access_user_id,
+      customer_id,
+    }
+  );
+  if (error) throw error;
+  // Supabase seems to be adding an extra array dimension.
+  const data = mistypedData as unknown as typeof mistypedData[number];
+
+  return { accessPoints: data };
+}
 
 export const loader: LoaderFunction = async ({
   request,

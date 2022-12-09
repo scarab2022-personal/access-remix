@@ -13,7 +13,7 @@ import { PageHeader } from "~/components/page-header";
 import { Table } from "~/components/table";
 import { Section } from "~/components/section";
 import { DescriptionList } from "~/components/description-list";
-import { requireAppRole } from "~/utils";
+import { requireAppRole } from "~/lib";
 import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
@@ -124,7 +124,10 @@ export default function RouteComponent() {
       <main className="space-y-6">
         <Section className="mx-auto max-w-lg">
           <DescriptionList>
-            <DescriptionList.Item term="Code" description={accessUserResult.code} />
+            <DescriptionList.Item
+              term="Code"
+              description={accessUserResult.code}
+            />
             <DescriptionList.Item term="Code Status" description={codeStatus} />
             <DescriptionList.Item
               term="ID"
@@ -157,25 +160,27 @@ export default function RouteComponent() {
                 </>
               }
             >
-              {(results[0].access_point_id ? results : results.slice(1)).map((i) => (
-                <tr key={i.access_point_id}>
-                  <Table.Td prominent>{i.access_point_name}</Table.Td>
-                  <Table.Td>{i.access_hub_name}</Table.Td>
-                  <Table.Td>{i.access_point_description}</Table.Td>
-                  <Table.TdLink
-                    to="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      submit(null, {
-                        method: "post",
-                        action: `${removeFormActionBase}/${i.access_point_id}/remove`,
-                      });
-                    }}
-                  >
-                    Remove
-                  </Table.TdLink>
-                </tr>
-              ))}
+              {(results[0].access_point_id ? results : results.slice(1)).map(
+                (i) => (
+                  <tr key={i.access_point_id}>
+                    <Table.Td prominent>{i.access_point_name}</Table.Td>
+                    <Table.Td>{i.access_hub_name}</Table.Td>
+                    <Table.Td>{i.access_point_description}</Table.Td>
+                    <Table.TdLink
+                      to="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        submit(null, {
+                          method: "post",
+                          action: `${removeFormActionBase}/${i.access_point_id}/remove`,
+                        });
+                      }}
+                    >
+                      Remove
+                    </Table.TdLink>
+                  </tr>
+                )
+              )}
             </Table>
           </Section.Body>
         </Section>

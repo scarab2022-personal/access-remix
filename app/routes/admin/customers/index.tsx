@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Table } from "~/components/table";
 import { PageHeader } from "~/components/page-header";
-import { requireAppRole } from "~/utils";
+import { requireAppRole } from "~/lib";
 import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
@@ -58,7 +58,9 @@ export default function RouteComponent() {
             <tr key={i.customer_id}>
               <Table.Td prominent>{i.email}</Table.Td>
               <Table.Td>{new Date(i.created_at).toLocaleDateString()}</Table.Td>
-              <Table.Td>{new Date(i.last_sign_in_at).toLocaleDateString()}</Table.Td>
+              <Table.Td>
+                {new Date(i.last_sign_in_at).toLocaleDateString()}
+              </Table.Td>
               <Table.TdLink to={`${i.customer_id}`}>View</Table.TdLink>
             </tr>
           ))}

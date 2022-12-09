@@ -17,7 +17,7 @@ import {
 import { Fragment } from "react";
 import { Button } from "~/components/button";
 import invariant from "tiny-invariant";
-import { classNames, requireAppRole } from "~/utils";
+import { classNames, requireAppRole } from "~/lib";
 import { PageHeader } from "~/components/page-header";
 import { Table } from "~/components/table";
 import { Section } from "~/components/section";

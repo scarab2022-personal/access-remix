@@ -7,7 +7,7 @@ import type { Database } from "db_types";
 import React from "react";
 import { PageHeader } from "~/components/page-header";
 import { Switch } from "~/components/switch";
-import { requireAppRole } from "~/utils";
+import { requireAppRole } from "~/lib";
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 

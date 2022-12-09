@@ -6,7 +6,7 @@ import invariant from "tiny-invariant";
 import { PageHeader } from "~/components/page-header";
 import { Form } from "~/components/form";
 import { Checkbox } from "~/components/checkbox";
-import { requireAppRole } from "~/utils";
+import { requireAppRole } from "~/lib";
 import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 

@@ -11,7 +11,7 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import React, { useState, useRef, Fragment } from "react";
 import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { requireAppRole } from "~/utils";
+import { requireAppRole } from "~/lib";
 
 export const handle = {
   breadcrumb: "Edit",

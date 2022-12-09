@@ -8,7 +8,7 @@ import { PageHeader } from "~/components/page-header";
 import { Form } from "~/components/form";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "db_types";
-import { requireAppRole } from "~/utils";
+import { requireAppRole } from "~/lib";
 
 export const handle = {
   breadcrumb: "Edit",
@@ -34,7 +34,7 @@ async function getLoaderData({
   // Supabase seems to be adding an extra array dimension.
   const data = mistypedData as unknown as typeof mistypedData[number];
   if (data.length !== 1) {
-    throw new Error("Invalid access hub")
+    throw new Error("Invalid access hub");
   }
 
   return { accessHub: data[0] };

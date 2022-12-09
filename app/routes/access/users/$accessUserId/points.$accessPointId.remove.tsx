@@ -1,7 +1,7 @@
 import type { ActionFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
-import { requireAppRole } from "~/utils";
+import { requireAppRole } from "~/lib";
 
 export const action: ActionFunction = async ({
   request,
