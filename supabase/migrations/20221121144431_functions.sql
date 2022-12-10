@@ -651,9 +651,10 @@ begin
     end if;
     -- create access hubs
     with hubs as (
-insert into access_hub (name, description, customer_id)
+insert into access_hub (name, description, heartbeat_at, customer_id)
         select 'Hub ' || hub_index,
             'This is hub ' || hub_index,
+            now(),
             new.id
         from generate_series(1, 2) as t (hub_index)
         returning access_hub_id
