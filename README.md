@@ -16,17 +16,12 @@
 - tailwind.config.js plugins: require('@tailwindcss/typography')
 - pnpm add @headlessui/react
 - pnpm add @heroicons/react
-- pnpm add lodash
-- pnpm add -D @types/lodash
 - pnpm add zod
 - pnpm add clsx
 - pnpm add -D supabase
 - pnpm supabase init
 - pnpm add @supabase/supabase-js
 - pnpm install @supabase/auth-helpers-remix
-- pnpm add -D @pgtyped/cli @pgtyped/query
-- pnpm add pg
-- pnpm add -D @types/pg
 - pnpm add remeda
 - pnpm add tiny-invariant
 
