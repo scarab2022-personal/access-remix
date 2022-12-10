@@ -11,77 +11,77 @@ export interface Database {
     Tables: {
       access_event: {
         Row: {
-          access_event_id: number
           at: string
           access: string
           code: string
           access_user_id: number | null
           access_point_id: number
+          access_event_id: number
         }
         Insert: {
-          access_event_id?: number
           at: string
           access: string
           code: string
           access_user_id?: number | null
           access_point_id: number
+          access_event_id?: number
         }
         Update: {
-          access_event_id?: number
           at?: string
           access?: string
           code?: string
           access_user_id?: number | null
           access_point_id?: number
+          access_event_id?: number
         }
       }
       access_hub: {
         Row: {
+          heartbeat_at: string | null
+          customer_id: string
           access_hub_id: number
           name: string
           description: string
-          heartbeat_at: string | null
           api_token: string
-          customer_id: string
         }
         Insert: {
+          heartbeat_at?: string | null
+          customer_id: string
           access_hub_id?: number
           name?: string
           description?: string
-          heartbeat_at?: string | null
           api_token?: string
-          customer_id: string
         }
         Update: {
+          heartbeat_at?: string | null
+          customer_id?: string
           access_hub_id?: number
           name?: string
           description?: string
-          heartbeat_at?: string | null
           api_token?: string
-          customer_id?: string
         }
       }
       access_point: {
         Row: {
-          access_point_id: number
           name: string
-          description: string
           position: number
           access_hub_id: number
+          access_point_id: number
+          description: string
         }
         Insert: {
-          access_point_id?: number
           name: string
-          description?: string
           position: number
           access_hub_id: number
+          access_point_id?: number
+          description?: string
         }
         Update: {
-          access_point_id?: number
           name?: string
-          description?: string
           position?: number
           access_hub_id?: number
+          access_point_id?: number
+          description?: string
         }
       }
       access_point_to_access_user: {
@@ -100,34 +100,34 @@ export interface Database {
       }
       access_user: {
         Row: {
-          access_user_id: number
           name: string
-          description: string
           code: string
           activate_code_at: string | null
           expire_code_at: string | null
           customer_id: string
           deleted_at: string | null
+          access_user_id: number
+          description: string
         }
         Insert: {
-          access_user_id?: number
           name: string
-          description?: string
           code: string
           activate_code_at?: string | null
           expire_code_at?: string | null
           customer_id: string
           deleted_at?: string | null
+          access_user_id?: number
+          description?: string
         }
         Update: {
-          access_user_id?: number
           name?: string
-          description?: string
           code?: string
           activate_code_at?: string | null
           expire_code_at?: string | null
           customer_id?: string
           deleted_at?: string | null
+          access_user_id?: number
+          description?: string
         }
       }
     }

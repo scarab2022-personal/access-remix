@@ -17,25 +17,6 @@ import type { ZodError } from "zod";
 import { z } from "zod";
 import { Form } from "~/components/form";
 
-export const loader: LoaderFunction = async ({ request }) => {
-  // const userId = await getUserId(request);
-  // if (userId) return redirect("/");
-  const response = new Response();
-  const supabaseClient = createServerClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
-    { request, response }
-  );
-  const { data, error } = await supabaseClient.auth.getSession();
-  if (error) throw error;
-  return json(
-    { dt: new Date(), data },
-    {
-      headers: response.headers,
-    }
-  );
-};
-
 const FieldValues = z
   .object({
     email: z
@@ -49,7 +30,6 @@ const FieldValues = z
   .strict();
 
 type ActionData = {
-  dt: Date;
   formErrors?: ZodError["formErrors"];
   authData?: AuthResponse["data"];
   authError?: AuthResponse["error"];
@@ -62,7 +42,6 @@ export const action: ActionFunction = async ({ request }) => {
   if (!parseResult.success) {
     return json<ActionData>(
       {
-        dt: new Date(),
         formErrors: parseResult.error.formErrors,
       },
       { status: 400 }
@@ -81,23 +60,11 @@ export const action: ActionFunction = async ({ request }) => {
   if (error) throw error;
 
   return json<ActionData>(
-    { dt: new Date(), authData: data, authError: error },
+    { authData: data, authError: error },
     {
       headers: response.headers, // for set-cookie
     }
   );
-
-  // return createUserSession({
-  //   request,
-  //   userId: user.id,
-  //   remember,
-  //   redirectTo:
-  //     redirectTo !== ""
-  //       ? redirectTo
-  //       : user.role === "admin"
-  //       ? "/admin/dashboard"
-  //       : "/access/dashboard",
-  // });
 };
 
 export const meta: MetaFunction = () => {
@@ -108,7 +75,6 @@ export const meta: MetaFunction = () => {
 
 function SignInForm() {
   const [searchParams] = useSearchParams();
-  // const redirectTo = searchParams.get("redirectTo") || "/access/dashboard";
   const redirectTo = searchParams.get("redirectTo") || "";
   const actionData = useActionData<ActionData>();
   const emailRef = React.useRef<HTMLInputElement>(null);
@@ -189,7 +155,6 @@ export default function SignInPage() {
           <SignInForm />
         )}
       </div>
-      {/* <pre>{JSON.stringify({ loaderData, actionData }, null, 2)}</pre> */}
     </div>
   );
 }

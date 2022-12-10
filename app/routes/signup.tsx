@@ -24,12 +24,6 @@ const FieldValues = z
   })
   .strict();
 
-export const loader: LoaderFunction = async ({ request }) => {
-  // const userId = await getUserId(request);
-  // if (userId) return redirect("/");
-  return json({});
-};
-
 type ActionData = {
   formErrors?: ZodError["formErrors"];
   authData?: AuthResponse["data"];
@@ -65,29 +59,6 @@ export const action: ActionFunction = async ({ request }) => {
       headers: response.headers, // for set-cookie
     }
   );
-
-  // const existingUser = await getUserByEmail(email);
-  // if (existingUser) {
-  //   return json<ActionData>(
-  //     {
-  //       formErrors: {
-  //         formErrors: [],
-  //         fieldErrors: {
-  //           email: ["A user already exists with this email"],
-  //         },
-  //       },
-  //     },
-  //     { status: 400 }
-  //   );
-  // }
-
-  // const user = await createUser(email, password, "customer");
-  // return createUserSession({
-  //   request,
-  //   userId: user.id,
-  //   remember: false,
-  //   redirectTo: typeof redirectTo === "string" ? redirectTo : "/",
-  // });
 };
 
 export const meta: MetaFunction = () => {

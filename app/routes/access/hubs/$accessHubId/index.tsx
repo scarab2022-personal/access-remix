@@ -11,12 +11,12 @@ import { json } from "@remix-run/node";
 import { useLoaderData, Link, useNavigate } from "@remix-run/react";
 import { Button } from "~/components/button";
 import invariant from "tiny-invariant";
-import { classNames, requireAppRole } from "~/lib";
 import { PageHeader } from "~/components/page-header";
 import { Section } from "~/components/section";
 import { Table } from "~/components/table";
 import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { classNames, requireAppRole } from "~/lib/utils";
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 

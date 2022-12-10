@@ -1,4 +1,5 @@
-import { useMatches, useOutletContext } from "@remix-run/react";
+import type { useMatches} from "@remix-run/react";
+import { useOutletContext } from "@remix-run/react";
 import { Link, Outlet } from "@remix-run/react";
 import {
   GenericCatchBoundary,
@@ -7,7 +8,7 @@ import {
 import { HomeIcon } from "@heroicons/react/24/solid";
 import { Nav } from "~/components/Nav";
 import { Container } from "~/components/container";
-import { ContextType } from "~/root";
+import type { ContextType } from "~/root";
 
 export const handle = {
   breadcrumb: (match: ReturnType<typeof useMatches>[number]) => (
