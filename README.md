@@ -57,6 +57,15 @@
 - truncate auth.schema_migrations;
 - \i supabase/seed.sql
 
+## pgTap
+
+- [pgTap official docs](https://pgtap.org/)
+- [Supabase db testing guide](https://supabase.com/docs/guides/database/testing)
+- [pgTap supabase docs](https://supabase.com/docs/guides/database/extensions/pgtap)
+- [Supabase pgTap guide](https://usebasejump.com/blog/testing-on-supabase-with-pgtap)
+- pnpm supabase test db
+
+
 ## pgtyped
 
 - pnpm exec pgtyped -w -c pgtyped.json
