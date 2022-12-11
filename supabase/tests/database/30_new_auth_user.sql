@@ -15,7 +15,10 @@ insert into auth.users (id, email)
 select is ((
             select count(*)
             from auth.users
-            where id = :'customer_id'), 1::bigint, 'customer exists');
+            where id = :'customer_id'
+                and raw_user_meta_data @> '{"appRole": "customer"}'::jsonb),
+            1::bigint,
+            'customer exists');
 
 select is ((
             select count(*)
@@ -46,7 +49,10 @@ insert into auth.users (id, email, raw_user_meta_data)
 select is ((
             select count(*)
             from auth.users
-            where id = :'admin_id'), 1::bigint, 'admin exists');
+            where id = :'admin_id'
+                and raw_user_meta_data @> '{"appRole": "admin"}'::jsonb),
+            1::bigint,
+            'admin exists');
 
 select is ((
             select count(*)
