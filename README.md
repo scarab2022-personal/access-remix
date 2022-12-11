@@ -62,9 +62,9 @@
 - [pgTap official docs](https://pgtap.org/)
 - [Supabase db testing guide](https://supabase.com/docs/guides/database/testing)
 - [pgTap supabase docs](https://supabase.com/docs/guides/database/extensions/pgtap)
-- [Supabase pgTap guide](https://usebasejump.com/blog/testing-on-supabase-with-pgtap)
+- [usebasejump pgtap blog](https://usebasejump.com/blog/testing-on-supabase-with-pgtap)
+- [Supabase managing envs](https://supabase.com/docs/guides/cli/managing-environments)
 - pnpm supabase test db
-
 
 ## pgtyped
 
