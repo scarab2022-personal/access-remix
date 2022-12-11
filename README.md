@@ -66,6 +66,7 @@
 - [Basejump repo](https://github.com/usebasejump/basejumpw)
 - [Supabase managing envs](https://supabase.com/docs/guides/cli/managing-environments)
 - [Supabase CLI github action](https://github.com/marketplace/actions/supabase-cli-action)
+- [Supabase action example repo](https://github.com/supabase/supabase-action-example)
 - pnpm supabase test db
 
 ## pgtyped
