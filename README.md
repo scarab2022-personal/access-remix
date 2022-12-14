@@ -43,6 +43,7 @@
 - pnpm supabase db push -p [db password]
 - pnpm supabase migration list
 - pnpm supabase migration new <migration name>
+- pnpm supabase db lint -s public
 - psql: \i supabase/seed.sql
 - studio url: http://localhost:54323
 - inbucket url: http://localhost:54324
