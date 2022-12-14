@@ -1,11 +1,10 @@
-name: Staging Database Push
-
+name: Staging Release
 on:
+  pull_request:
   push:
     branches:
       - dev
   workflow_dispatch:
-
 jobs:
   db-test-job:
     name: Database Test Job
