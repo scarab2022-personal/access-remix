@@ -70,11 +70,6 @@
 - [Supabase action example repo](https://github.com/supabase/supabase-action-example)
 - pnpm supabase test db
 
-## pgtyped
-
-- pnpm exec pgtyped -w -c pgtyped.json
-- psql postgresql://postgres:postgres@localhost:54322/postgres
-
 # Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
