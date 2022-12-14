@@ -624,7 +624,7 @@ create or replace function on_new_auth_user_before ()
     set search_path = public, pg_temp
     as $$
 begin
-    raise notice 'new auth user before: %, %, %', new.id, new.email, new.raw_user_meta_data;
+    -- raise notice 'new auth user before: %, %, %', new.id, new.email, new.raw_user_meta_data;
     if (new.raw_user_meta_data ->> 'appRole' = 'admin') then
         return new;
     end if;
@@ -645,7 +645,7 @@ create or replace function on_new_auth_user_after ()
 declare
     hub_ids int[];
 begin
-    raise notice 'new auth user_after: %, %, %', new.id, new.email, new.raw_user_meta_data;
+    -- raise notice 'new auth user_after: %, %, %', new.id, new.email, new.raw_user_meta_data;
     if (new.raw_user_meta_data ->> 'appRole' = 'admin') then
         return new;
     end if;
