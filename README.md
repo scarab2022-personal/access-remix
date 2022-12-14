@@ -25,6 +25,10 @@
 - pnpm add remeda
 - pnpm add tiny-invariant
 
+## Github
+
+- secrets: SUPABASE_ACCESS_TOKEN, PROD_SUPABASE_PROJECT_ID, PROD_SUPABASE_DB_PASSWORD, STAGING_SUPABASE_PROJECT_ID, STAGING_SUPABASE_DB_PASSWORD
+
 ## Supabase CLI
 
 [Install via NPM](https://github.com/supabase/cli),
