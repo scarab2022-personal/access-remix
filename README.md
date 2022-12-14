@@ -25,6 +25,10 @@
 - pnpm add remeda
 - pnpm add tiny-invariant
 
+## Github
+
+- secrets: SUPABASE_ACCESS_TOKEN, PROD_SUPABASE_PROJECT_ID, PROD_SUPABASE_DB_PASSWORD, STAGING_SUPABASE_PROJECT_ID, STAGING_SUPABASE_DB_PASSWORD
+
 ## Supabase CLI
 
 [Install via NPM](https://github.com/supabase/cli),
@@ -43,6 +47,7 @@
 - pnpm supabase db push -p [db password]
 - pnpm supabase migration list
 - pnpm supabase migration new <migration name>
+- pnpm supabase db lint -s public
 - psql: \i supabase/seed.sql
 - studio url: http://localhost:54323
 - inbucket url: http://localhost:54324
@@ -68,11 +73,6 @@
 - [Supabase CLI github action](https://github.com/marketplace/actions/supabase-cli-action)
 - [Supabase action example repo](https://github.com/supabase/supabase-action-example)
 - pnpm supabase test db
-
-## pgtyped
-
-- pnpm exec pgtyped -w -c pgtyped.json
-- psql postgresql://postgres:postgres@localhost:54322/postgres
 
 # Welcome to Remix!
 
