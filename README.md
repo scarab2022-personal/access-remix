@@ -36,6 +36,7 @@
 - https://access-remix.vercel.app/
 - https://access-remix-staging.vercel.app/
 - env vars: SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
+- integrations: none
 
 ## Supabase
 
