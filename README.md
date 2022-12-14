@@ -28,6 +28,20 @@
 ## Github
 
 - secrets: SUPABASE_ACCESS_TOKEN, PROD_SUPABASE_PROJECT_ID, PROD_SUPABASE_DB_PASSWORD, STAGING_SUPABASE_PROJECT_ID, STAGING_SUPABASE_DB_PASSWORD
+- [Supabase CLI github action](https://github.com/marketplace/actions/supabase-cli-action)
+- [Supabase action example repo](https://github.com/supabase/supabase-action-example)
+
+## Vercel
+
+- https://access-remix.vercel.app/
+- https://access-remix-staging.vercel.app/
+- env: SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
+
+## Supabase
+
+- Authentication | Email Template
+- Authentication | URL Configuration
+- [Supabase managing envs](https://supabase.com/docs/guides/cli/managing-environments)
 
 ## Supabase CLI
 
@@ -69,9 +83,6 @@
 - [pgTap supabase docs](https://supabase.com/docs/guides/database/extensions/pgtap)
 - [usebasejump pgtap blog](https://usebasejump.com/blog/testing-on-supabase-with-pgtap)
 - [Basejump repo](https://github.com/usebasejump/basejumpw)
-- [Supabase managing envs](https://supabase.com/docs/guides/cli/managing-environments)
-- [Supabase CLI github action](https://github.com/marketplace/actions/supabase-cli-action)
-- [Supabase action example repo](https://github.com/supabase/supabase-action-example)
 - pnpm supabase test db
 
 # Welcome to Remix!
