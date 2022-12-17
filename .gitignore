@@ -12,7 +12,8 @@ node_modules
 
 /app/styles/tailwind.css
 
-/cypress/screenshots
-/cypress/videos
-
 .vscode
+
+/e2e-results/
+/playwright-report/
+/playwright/.cache/

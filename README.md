@@ -86,6 +86,14 @@
 - [Basejump repo](https://github.com/usebasejump/basejumpw)
 - pnpm supabase test db
 
+## Playwright
+
+- pnpm dlx create-playwright
+- sudo -E env PATH="$PATH" pnpm playwright install-deps
+- [jest expect](https://jestjs.io/docs/expect)
+- [remix playwright vitest example](https://github.com/jacob-ebey/remix-vitest)
+- pnpm playwright test
+
 # Welcome to Remix!
 
 - [Remix Docs](https://remix.run/docs)
