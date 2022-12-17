@@ -12,7 +12,6 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useNavigate,
 } from "@remix-run/react";
 import {
   createBrowserClient,
@@ -71,7 +70,7 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "Access",
+  title: "Access Remix",
   viewport: "width=device-width,initial-scale=1",
 });
 
