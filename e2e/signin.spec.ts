@@ -1,7 +1,13 @@
 import { test, expect } from "@playwright/test";
 
-/*
+// https://github.com/microsoft/playwright/issues/15977
+// test.use({ storageState: undefined });
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test("sign in", async ({ page, context }) => {
+  // await context.clearCookies();
+  console.log({ test: "sign in", storage: await context.storageState() });
+
   // Delete any existing emails.
   await page.goto("http://localhost:54324/m/scarab2022");
   await page.getByRole("button", { name: "" }).last().click();
@@ -11,7 +17,7 @@ test("sign in", async ({ page, context }) => {
 
   await page.goto("/");
   await expect(page).toHaveTitle(/Access Remix/);
-  await page.getByRole("link", { name: "sign in" }).click();
+  await page.getByRole("link", { name: "Sign in" }).click();
   await page.getByLabel("Email").fill("scarab2022@gmail.com");
   await page.getByRole("button", { name: "sign in" }).click();
   await expect(page.getByText("check your email")).toBeVisible();
@@ -23,13 +29,5 @@ test("sign in", async ({ page, context }) => {
   await page.getByRole("link", { name: "Enter" }).click();
   await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
 
-  await context.storageState({ path: "scarab2022-state.json" });
-});
-*/
-
-test("enter", async ({ page }) => {
-  await page.goto("/");
-  await expect(page).toHaveTitle(/Access Remix/);
-  await page.getByRole("link", { name: "Enter" }).click();
-  await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
+  // await context.storageState({ path: "scarab2022-state.json" });
 });
