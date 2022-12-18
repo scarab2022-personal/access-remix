@@ -1,11 +1,9 @@
 import { test, expect } from "@playwright/test";
 
 // https://github.com/microsoft/playwright/issues/15977
-// test.use({ storageState: undefined });
 test.use({ storageState: { cookies: [], origins: [] } });
 
 test("sign in", async ({ page, context }) => {
-  // await context.clearCookies();
   console.log({ test: "sign in", storage: await context.storageState() });
 
   // Delete any existing emails.
