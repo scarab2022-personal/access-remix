@@ -1,5 +1,5 @@
 // global-setup.ts
-import type { Browser, FullConfig, Page } from "@playwright/test";
+import type { Browser, FullConfig } from "@playwright/test";
 import { chromium } from "@playwright/test";
 
 async function saveStorageState(
@@ -28,6 +28,7 @@ async function saveStorageState(
   await page.context().storageState({
     path: storageStatePath,
   });
+  await page.close();
 }
 
 async function globalSetup(config: FullConfig) {
