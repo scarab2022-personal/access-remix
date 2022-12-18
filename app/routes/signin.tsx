@@ -1,6 +1,5 @@
 import type {
   ActionFunction,
-  LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -88,7 +87,7 @@ function SignInForm() {
   return (
     <Form method="post" className="py-8 px-4 sm:px-10" noValidate replace>
       <Form.Header className="align-center flex flex-col">
-        <Form.H3 prominent>Log into your account</Form.H3>
+        <Form.H3 prominent>Sign into your account</Form.H3>
         <Form.P prominent>
           Or{" "}
           <Link
@@ -129,7 +128,7 @@ function SignInForm() {
         <input type="hidden" name="redirectTo" value={redirectTo} />
       </Form.Body>
       <Form.Footer>
-        <Form.SubmitButton wide>Log in</Form.SubmitButton>
+        <Form.SubmitButton wide>Sign in</Form.SubmitButton>
       </Form.Footer>
     </Form>
   );
@@ -139,7 +138,7 @@ export default function SignInPage() {
   // const [searchParams] = useSearchParams();
   // const redirectTo = searchParams.get("redirectTo") || "/access/dashboard";
   // const redirectTo = searchParams.get("redirectTo") || "";
-  const loaderData = useLoaderData();
+  // const loaderData = useLoaderData();
   const actionData = useActionData<ActionData>();
 
   // Simple card
