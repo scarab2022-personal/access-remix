@@ -93,6 +93,7 @@
 - [jest expect](https://jestjs.io/docs/expect)
 - [remix playwright vitest example](https://github.com/jacob-ebey/remix-vitest)
 - pnpm playwright test
+- pnpm playwright show-report e2e-results/playwright-report
 
 # Welcome to Remix!
 

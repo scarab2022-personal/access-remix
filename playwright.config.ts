@@ -32,7 +32,7 @@ const config: PlaywrightTestConfig = {
 
   // Will cause error which can be ignored since nested within outputDir
   // Configuration Error: HTML reporter output folder clashes with the tests output folder
-  reporter: [["html", { outputFolder: "e2e-results/reports" }]],
+  reporter: [["html", { outputFolder: "e2e-results/playwright-report" }]],
 
   globalSetup: require.resolve("./e2e/global-setup"),
   use: {
