@@ -38,6 +38,7 @@ const config: PlaywrightTestConfig = {
   use: {
     // headless: false,
     // browserName: 'chromium',
+    storageState: "e2e-results/storage-states/customerStorageState.json",
 
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 0,
