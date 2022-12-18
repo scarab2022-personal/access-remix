@@ -27,7 +27,7 @@ async function globalSetup(config: FullConfig) {
   await page.getByRole("link", { name: "Enter" }).click();
   await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
 
-  await page.context().storageState({ path: "storageState.json" });
+  await page.context().storageState({ path: "adminStorageState.json" });
   await browser.close();
 }
 
