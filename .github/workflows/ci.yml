@@ -31,7 +31,7 @@ jobs:
         run: pnpm dlx playwright install --with-deps
       - name: Build
         run: pnpm build
-      - name Start web server
+      - name: Start web server
         run: pnpm remix dev
       - name: Run playwright tests
         run: pnpm dlx playwright test
