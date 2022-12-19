@@ -1,3 +1,7 @@
+## Notes
+
+- hack: ci uses .env.example
+
 ## Dev Setup
 
 - .eslintrc.js: prettier
