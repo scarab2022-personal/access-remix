@@ -26,6 +26,7 @@ async function saveStorageState(
     if ((await page.getByText("your magic link").count()) > 0) {
       break;
     }
+    console.log(`Wait for magic link iteration: ${i}`);
     await page.reload();
   }
   await page.getByText("Your Magic Link").first().click();
