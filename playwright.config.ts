@@ -7,9 +7,13 @@ import { devices } from "@playwright/test";
  */
 // require('dotenv').config();
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
+// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+const PORT = Number(process.env.PORT || 3000);
+
+if (!PORT) {
+  throw new Error(`PORT environment variable is required`);
+}
+
 const config: PlaywrightTestConfig = {
   testDir: "./e2e",
   /* Maximum time one test can run for. */
@@ -36,7 +40,7 @@ const config: PlaywrightTestConfig = {
 
   globalSetup: require.resolve("./e2e/global-setup"),
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: `http://localhost:${PORT}`,
     storageState: "e2e-results/storage-states/customerStorageState.json",
     // headless: false,
 
@@ -103,10 +107,11 @@ const config: PlaywrightTestConfig = {
   outputDir: "e2e-results/",
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   port: 3000,
-  // },
+  webServer: {
+    command: "pnpm dev",
+    port: Number(PORT),
+    reuseExistingServer: !process.env.CI,
+  },
 };
 
 export default config;

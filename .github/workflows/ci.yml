@@ -2,11 +2,17 @@ name: CI
 on:
   push:
   workflow_dispatch:
+env:
+  CI: true
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.12.0
       - uses: actions/checkout@v3
+      - name: Copy ci env vars
+        run: cp .env.example .env
 
       - uses: supabase/setup-cli@v1
         with:
@@ -31,8 +37,6 @@ jobs:
         run: pnpm dlx playwright install --with-deps
       - name: Build
         run: pnpm build
-      # - name: Start web server
-      #   run: pnpm remix dev
       - name: Run playwright tests
         run: pnpm dlx playwright test
       - uses: actions/upload-artifact@v3

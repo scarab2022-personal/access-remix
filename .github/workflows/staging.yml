@@ -8,6 +8,8 @@ jobs:
     name: Database Test Job
     runs-on: ubuntu-latest
     steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.12.0
       - uses: actions/checkout@v3
       - uses: supabase/setup-cli@v1
         with:
