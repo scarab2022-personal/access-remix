@@ -1,26 +1,29 @@
-name: Playwright Tests
+name: CI
 on:
   push:
-    # branches: [ main, master ]
-    branches: [noop]
-  pull_request:
-    # branches: [ main, master ]
-    branches: [noop]
   workflow_dispatch:
 jobs:
   test:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 1.22.3
+
+      - name: Start supabase
+        run: supabase start
+      - name: Test supabase
+        run: supabase test db
+
       - name: Install dependencies
         run: pnpm install
-      - name: Install Playwright Browsers
+      - name: Install playwright browsers
         run: pnpm dlx playwright install --with-deps
-      - name: Run Playwright tests
+      - name: Run playwright tests
         run: pnpm dlx playwright test
       - uses: actions/upload-artifact@v3
         if: always()
@@ -28,3 +31,4 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+

@@ -1,8 +1,7 @@
 name: Production Release
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 jobs:
   db-push-job:

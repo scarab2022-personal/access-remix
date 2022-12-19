@@ -1,9 +1,7 @@
 name: Staging Release
 on:
-  pull_request:
   push:
-    branches:
-      - dev
+    branches: [dev]
   workflow_dispatch:
 jobs:
   db-test-job:
@@ -14,9 +12,9 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: 1.22.3
-      - name: Supabase Start
+      - name: Start supabase
         run: supabase start
-      - name: Run Tests
+      - name: Test supabase
         run: supabase test db
   db-push-job:
     name: Database Push Job
