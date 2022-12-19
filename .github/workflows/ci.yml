@@ -19,8 +19,6 @@ jobs:
           version: 1.22.3
       - name: Start supabase
         run: supabase start
-      - name: Supabase status
-        run: supabase status
       - name: Test supabase
         run: supabase test db
 
