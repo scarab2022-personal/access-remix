@@ -1,11 +1,11 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Page } from "@playwright/test";
 
 // https://github.com/microsoft/playwright/issues/15977
 test.use({ storageState: { cookies: [], origins: [] } });
 
 test("sign up in out", async ({ page, context }) => {
   await page.goto("http://localhost:54324/m/signupinout");
-  await page.getByRole("button", { name: "" }).last().click();
+  await page.locator(".fa-trash").click();
   await page.getByText("delete all messages");
   await page.getByRole("button", { name: "yes" }).click();
   await expect(page.getByRole("complementary").nth(1)).toBeEmpty();
@@ -18,6 +18,7 @@ test("sign up in out", async ({ page, context }) => {
   await expect(page.getByText("check your email")).toBeVisible();
 
   await page.goto("http://localhost:54324/m/signupinout");
+  await waitForMagicLink(page);
   await page.getByText("Your Magic Link").first().click();
   await page.getByRole("link", { name: "Log In" }).click();
   await expect(page).toHaveTitle(/Access Remix/);
@@ -29,7 +30,7 @@ test("sign up in out", async ({ page, context }) => {
   await expect(page.getByText("from the cloud")).toBeVisible();
 
   await page.goto("http://localhost:54324/m/signupinout");
-  await page.getByRole("button", { name: "" }).last().click();
+  await page.locator(".fa-trash").click();
   await page.getByText("delete all messages");
   await page.getByRole("button", { name: "yes" }).click();
   await expect(page.getByRole("complementary").nth(1)).toBeEmpty();
@@ -42,6 +43,7 @@ test("sign up in out", async ({ page, context }) => {
   await expect(page.getByText("check your email")).toBeVisible();
 
   await page.goto("http://localhost:54324/m/signupinout");
+  await waitForMagicLink(page);
   await page.getByText("Your Magic Link").first().click();
   await page.getByRole("link", { name: "Log In" }).click();
   await expect(page).toHaveTitle(/Access Remix/);
@@ -52,3 +54,13 @@ test("sign up in out", async ({ page, context }) => {
   await page.getByRole("menuitem", { name: "Sign out" }).click();
   await expect(page.getByText("from the cloud")).toBeVisible();
 });
+
+// Hack
+async function waitForMagicLink(page: Page) {
+  for (let i = 0; i < 10; i++) {
+    if ((await page.getByText("your magic link").count()) > 0) {
+      break;
+    }
+    await page.reload();
+  }
+}

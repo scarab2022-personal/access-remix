@@ -11,7 +11,7 @@ async function saveStorageState(
   console.log({ fn: "saveStorageState", email, mailboxUrl, storageStatePath });
   const page = await browser.newPage();
   await page.goto(mailboxUrl);
-  await page.getByRole("button", { name: "" }).last().click();
+  await page.locator(".fa-trash").click();
   await page.getByText("delete all messages");
   await page.getByRole("button", { name: "yes" }).click();
 
@@ -21,6 +21,13 @@ async function saveStorageState(
   await page.getByRole("button", { name: "sign in" }).click();
 
   await page.goto(mailboxUrl);
+  // hack
+  for (let i = 0; i < 10; i++) {
+    if ((await page.getByText("your magic link").count()) > 0) {
+      break;
+    }
+    await page.reload();
+  }
   await page.getByText("Your Magic Link").first().click();
   await page.getByRole("link", { name: "Log In" }).click();
   await page.getByRole("link", { name: "Enter" }).click();
