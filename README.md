@@ -1,6 +1,7 @@
 ## Notes
 
 - hack: ci uses .env.example
+- ignoring playwright configuration error: HTML reporter output folder clashes with the tests output folder
 
 ## Dev Setup
 
