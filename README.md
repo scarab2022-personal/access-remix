@@ -32,7 +32,8 @@
 - pnpm dlx create-playwright
 - pnpm add -D vitest
 - pnpm add -D @vitejs/plugin-react
-- pnpm add -D jsdom @testing-library/react @testing-library/user-event
+- pnpm add -D jsdom @testing-library/react
+- pnpm add -D @testing-library/user-event ???
 
 ## Github
 

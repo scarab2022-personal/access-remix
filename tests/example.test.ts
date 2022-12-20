@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+// import { describe, it, expect } from "vitest";
 
 describe("something truthy and falsy", () => {
   it("true to be true", () => {
@@ -9,3 +9,5 @@ describe("something truthy and falsy", () => {
     expect(false).toBe(false);
   });
 });
+
+export {};

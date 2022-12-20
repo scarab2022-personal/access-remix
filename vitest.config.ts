@@ -6,8 +6,8 @@ export default VitestConfig.defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
+    watch: false,
     include: ["./tests/**/*.test.{ts,tsx}"],
-    // exclude: ["node_modules", "e2e"],
     includeSource: ["app/**/*.{ts,tsx}"],
     coverage: {
       exclude: ["app/mocks.tsx"],

@@ -15,7 +15,6 @@ specifiers:
   '@tailwindcss/forms': 0.5.3
   '@tailwindcss/typography': 0.5.8
   '@testing-library/react': ^13.4.0
-  '@testing-library/user-event': ^14.4.3
   '@types/node': 18.11.9
   '@types/react': ^18.0.25
   '@types/react-dom': ^18.0.9
@@ -62,7 +61,6 @@ devDependencies:
   '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.4
   '@tailwindcss/typography': 0.5.8_tailwindcss@3.2.4
   '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
-  '@testing-library/user-event': 14.4.3
   '@types/node': 18.11.9
   '@types/react': 18.0.25
   '@types/react-dom': 18.0.9
@@ -2261,13 +2259,6 @@ packages:
       '@types/react-dom': 18.0.9
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-    dev: true
-
-  /@testing-library/user-event/14.4.3:
-    resolution: {integrity: sha512-kCUc5MEwaEMakkO5x7aoD+DLi02ehmEM2QCGWvNqAS1dV/fAvORWEjnjsEIvml59M7Y5kCkWN6fCCyPOe8OL6Q==}
-    engines: {node: '>=12', npm: '>=6'}
-    peerDependencies:
-      '@testing-library/dom': '>=7.21.4'
     dev: true
 
   /@tootallnate/once/1.1.2:
