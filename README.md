@@ -29,6 +29,10 @@
 - pnpm install @supabase/auth-helpers-remix
 - pnpm add remeda
 - pnpm add tiny-invariant
+- pnpm dlx create-playwright
+- pnpm add -D vitest
+- pnpm add -D @vitejs/plugin-react
+- pnpm add -D jsdom @testing-library/react @testing-library/user-event
 
 ## Github
 
@@ -90,6 +94,12 @@
 - [usebasejump pgtap blog](https://usebasejump.com/blog/testing-on-supabase-with-pgtap)
 - [Basejump repo](https://github.com/usebasejump/basejumpw)
 - pnpm supabase test db
+
+## Vitest
+
+- [Example with RTL and MSW](https://github.com/vitest-dev/vitest/tree/main/examples/react-testing-lib-msw)
+- [Vite ts config paths](https://www.npmjs.com/package/vite-tsconfig-paths) included in blues 
+- [Weiruch Post](https://www.robinwieruch.de/vitest-react-testing-library/)
 
 ## Playwright
 
