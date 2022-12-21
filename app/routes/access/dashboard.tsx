@@ -120,7 +120,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 const connectionStatusColors: {
-  [Props in ReturnType<typeof connectionStatus>]: Parameters<
+  [Props in ReturnType<typeof connectionStatusString>]: Parameters<
     typeof Badge
   >[0]["color"];
 } = {
