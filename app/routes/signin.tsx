@@ -143,7 +143,7 @@ export default function SignInRoute() {
     <div className="flex min-h-full flex-col justify-center sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         {actionData?.authData ? (
-          <p>Check your email for the sign in link.</p>
+          <p className="mt-8">Check your email for the sign in link.</p>
         ) : (
           <SignInForm />
         )}
