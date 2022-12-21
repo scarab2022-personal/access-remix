@@ -22,28 +22,28 @@ jobs:
       - name: Test supabase
         run: supabase test db
 
-  # unit:
-  #     runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Cancel previous runs
-  #       uses: styfle/cancel-workflow-action@0.11.0
-  #     - uses: actions/checkout@v3
-  #     - name: Copy ci env vars
-  #       run: cp .env.example .env
-  #     - uses: pnpm/action-setup@v2
-  #       with:
-  #         version: 7
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: 18
-  #         cache: "pnpm"
-  #     - name: Install dependencies
-  #       run: pnpm install
-  #     - name: Build
-  #       run: pnpm build
-  #     - name: Test
-  #       run: pnpm test
-        
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.11.0
+      - uses: actions/checkout@v3
+      - name: Copy ci env vars
+        run: cp .env.example .env
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 7
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build
+        run: pnpm build
+      - name: Test
+        run: pnpm test
+
   e2e:
     runs-on: ubuntu-latest
     steps:
