@@ -162,8 +162,10 @@ if (import.meta.vitest) {
 
   it("renders", () => {
     RemixReactMock.useSearchParams.mockReturnValue([new URLSearchParams()]);
-    let { getByRole } = RTL.render(<SignInRoute />);
+    RTL.render(<SignInRoute />);
     RTL.screen.debug();
-    // expect(getByRole("link").getAttribute("href")).toBe("/");
+    expect(
+      RTL.screen.getByRole("button", { name: /sign in/i })
+    ).toBeInTheDocument();
   });
 }

@@ -34,6 +34,7 @@
 - pnpm add -D @vitejs/plugin-react
 - pnpm add -D jsdom @testing-library/react
 - pnpm add -D @testing-library/jest-dom
+- pnpm add -D @types/testing-library__jest-dom
 - pnpm add -D @testing-library/user-event ???
 - pnpm add -D react-router
 
