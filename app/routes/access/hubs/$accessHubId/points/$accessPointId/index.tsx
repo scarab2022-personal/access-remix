@@ -120,7 +120,7 @@ export default function RouteComponent() {
         }
         side={
           <>
-            <span className="hidden sm:block">
+            {/* <span className="hidden sm:block">
               <Button variant="white" onClick={() => navigate("activity")}>
                 <LinkIcon
                   className="-ml-1 mr-2 h-5 w-5 text-gray-500"
@@ -128,8 +128,9 @@ export default function RouteComponent() {
                 />
                 Activity
               </Button>
-            </span>
-            <span className="sm:ml-3">
+            </span> */}
+            {/* <span className="sm:ml-3"> */}
+            <span className="">
               <Button onClick={() => navigate("edit")}>
                 <PencilIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                 Edit
@@ -137,7 +138,7 @@ export default function RouteComponent() {
             </span>
 
             {/* Dropdown */}
-            <Menu as="span" className="relative ml-3 sm:hidden">
+            {/* <Menu as="span" className="relative ml-3 sm:hidden">
               <Menu.Button as={Fragment}>
                 <Button variant="white">
                   More
@@ -186,7 +187,7 @@ export default function RouteComponent() {
                   </Menu.Item>
                 </Menu.Items>
               </Transition>
-            </Menu>
+            </Menu> */}
           </>
         }
       />
