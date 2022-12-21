@@ -33,7 +33,9 @@
 - pnpm add -D vitest
 - pnpm add -D @vitejs/plugin-react
 - pnpm add -D jsdom @testing-library/react
+- pnpm add -D @testing-library/jest-dom
 - pnpm add -D @testing-library/user-event ???
+- pnpm add -D react-router
 
 ## Github
 
@@ -99,8 +101,9 @@
 ## Vitest
 
 - [Example with RTL and MSW](https://github.com/vitest-dev/vitest/tree/main/examples/react-testing-lib-msw)
-- [Vite ts config paths](https://www.npmjs.com/package/vite-tsconfig-paths) included in blues 
+- [Vite ts config paths](https://www.npmjs.com/package/vite-tsconfig-paths) included in blues
 - [Weiruch Post](https://www.robinwieruch.de/vitest-react-testing-library/)
+- [RTL Mistakes](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
 
 ## Playwright
 

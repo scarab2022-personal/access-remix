@@ -13,6 +13,7 @@ export default VitestConfig.defineConfig({
       exclude: ["app/mocks.tsx"],
       reporter: process.env.CI ? "json" : "html-spa",
     },
+    setupFiles: "./tests/global-setup.ts",
   },
   resolve: {
     alias: {
