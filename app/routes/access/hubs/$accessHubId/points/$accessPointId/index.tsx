@@ -2,19 +2,14 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
   useLoaderData,
-  Link,
   useNavigate,
   useSubmit,
   useFormAction,
 } from "@remix-run/react";
-import { Menu, Transition } from "@headlessui/react";
 import {
-  ChevronDownIcon,
-  LinkIcon,
   MapPinIcon,
   PencilIcon,
 } from "@heroicons/react/24/solid";
-import { Fragment } from "react";
 import { Button } from "~/components/button";
 import invariant from "tiny-invariant";
 import { PageHeader } from "~/components/page-header";
@@ -23,7 +18,7 @@ import { Section } from "~/components/section";
 import { DescriptionList } from "~/components/description-list";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "db_types";
-import { classNames, requireAppRole } from "~/lib/utils";
+import { requireAppRole } from "~/lib/utils";
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
