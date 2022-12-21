@@ -135,10 +135,10 @@ function connectionStatusString(
   // as const so infer is string literal not string in getLoaderData().
   if (heartbeatAt) {
     const deltaMs = Date.now() - new Date(heartbeatAt).getTime();
-    if (deltaMs < 5 * 1000) {
+    if (deltaMs < 30 * 1000) {
       return "Live" as const;
     }
-    if (deltaMs < 10 * 1000) {
+    if (deltaMs < 2 * 60 * 1000) {
       return "Dying" as const;
     }
   }
