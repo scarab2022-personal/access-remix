@@ -20,9 +20,9 @@ export const handle = {
   ),
 };
 
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
+const userNavigation: Array<{ name: string, href: string}> = [
+  // { name: "Your Profile", href: "#" },
+  // { name: "Settings", href: "#" },
 ];
 export const navigation = [
   { name: "Dashboard", href: "dashboard" },

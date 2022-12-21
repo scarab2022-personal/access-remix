@@ -8,6 +8,7 @@ import React from "react";
 import { PageHeader } from "~/components/page-header";
 import { Switch } from "~/components/switch";
 import { requireAppRole } from "~/lib/utils";
+import { Badge } from "~/components/badge";
 
 type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
@@ -118,6 +119,32 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 };
 
+const connectionStatusColors: {
+  [Props in ReturnType<typeof connectionStatus>]: Parameters<
+    typeof Badge
+  >[0]["color"];
+} = {
+  Dying: "yellow",
+  Live: "green",
+  Dead: "red",
+};
+
+function connectionStatusString(
+  heartbeatAt: LoaderData["stats"]["hubs"][number]["heartbeat_at"]
+) {
+  // as const so infer is string literal not string in getLoaderData().
+  if (heartbeatAt) {
+    const deltaMs = Date.now() - new Date(heartbeatAt).getTime();
+    if (deltaMs < 5 * 1000) {
+      return "Live" as const;
+    }
+    if (deltaMs < 10 * 1000) {
+      return "Dying" as const;
+    }
+  }
+  return "Dead" as const;
+}
+
 export default function RouteComponent() {
   const { stats } = useLoaderData<LoaderData>();
   const poll = useFetcher<LoaderData>();
@@ -144,6 +171,7 @@ export default function RouteComponent() {
       />
       <main className=" space-y-8">
         {(poll.data?.stats.hubs ?? stats.hubs).map((h) => {
+          const connectionStatus = connectionStatusString(h.heartbeat_at);
           // Simple cards: https://tailwindui.com/components/application-ui/lists/grid-lists
           return (
             <div
@@ -167,10 +195,10 @@ export default function RouteComponent() {
                       Grants: {h.grant} Denies: {h.deny}
                     </p>
                   </div>
-                  <div className="flex-shrink-0  pr-2">
-                    {/* <Badge color={connectionStatusColors[h.connectionStatus]}>
-                      {h.connectionStatus}
-                    </Badge> */}
+                  <div className="flex-shrink-0 pr-2">
+                    <Badge color={connectionStatusColors[connectionStatus]}>
+                      {connectionStatus}
+                    </Badge>
                   </div>
                 </div>
               </div>
@@ -192,8 +220,7 @@ export default function RouteComponent() {
                           {p.access_point_name}
                         </Link>
                         <p className="text-gray-500">
-                          Grants: {p.grant} Denies:
-                          {p.deny}
+                          Grants: {p.grant} Denies: {p.deny}
                         </p>
                       </div>
                       <div className="flex-shrink-0  pr-2">
