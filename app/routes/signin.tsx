@@ -1,20 +1,14 @@
-import type {
-  ActionFunction,
-  MetaFunction,
-} from "@remix-run/node";
-import { json } from "@remix-run/node";
-import {
-  Link,
-  useActionData,
-  useLoaderData,
-  useSearchParams,
-} from "@remix-run/react";
-import { createServerClient } from "@supabase/auth-helpers-remix";
-import type { AuthResponse } from "@supabase/supabase-js";
+import * as Mocks from "~/mocks";
+import * as RemixReact from "@remix-run/react"; // after mocks since its mocked
+import * as RTL from "@testing-library/react";
 import * as React from "react";
-import type { ZodError } from "zod";
+import type { ActionFunction, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { createServerClient } from "@supabase/auth-helpers-remix";
 import { z } from "zod";
 import { Form } from "~/components/form";
+import type { AuthResponse } from "@supabase/supabase-js";
+import type { ZodError } from "zod";
 
 const FieldValues = z
   .object({
@@ -73,9 +67,9 @@ export const meta: MetaFunction = () => {
 };
 
 function SignInForm() {
-  const [searchParams] = useSearchParams();
+  const [searchParams] = RemixReact.useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "";
-  const actionData = useActionData<ActionData>();
+  const actionData = RemixReact.useActionData<ActionData>();
   const emailRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -90,7 +84,7 @@ function SignInForm() {
         <Form.H3 prominent>Sign into your account</Form.H3>
         <Form.P prominent>
           Or{" "}
-          <Link
+          <RemixReact.Link
             to={{
               pathname: "/signup",
               search: searchParams.toString(),
@@ -98,7 +92,7 @@ function SignInForm() {
             className="font-medium text-indigo-600 hover:text-indigo-500"
           >
             sign up here
-          </Link>
+          </RemixReact.Link>
         </Form.P>
       </Form.Header>
 
@@ -134,12 +128,12 @@ function SignInForm() {
   );
 }
 
-export default function SignInPage() {
+export default function SignInRoute() {
   // const [searchParams] = useSearchParams();
   // const redirectTo = searchParams.get("redirectTo") || "/access/dashboard";
   // const redirectTo = searchParams.get("redirectTo") || "";
   // const loaderData = useLoaderData();
-  const actionData = useActionData<ActionData>();
+  const actionData = RemixReact.useActionData<ActionData>();
 
   // Simple card
   // https://tailwindui.com/components/application-ui/forms/sign-in-forms
@@ -156,4 +150,20 @@ export default function SignInPage() {
       </div>
     </div>
   );
+}
+
+if (import.meta.vitest) {
+  vi.mock("@remix-run/react", () =>
+    Mocks.createRemixReactMock({ path: "/sigin" })
+  );
+  const RemixReactMock = RemixReact as unknown as ReturnType<
+    typeof Mocks.createRemixReactMock
+  >;
+
+  it("renders", () => {
+    RemixReactMock.useSearchParams.mockReturnValue([new URLSearchParams()]);
+    let { getByRole } = RTL.render(<SignInRoute />);
+    RTL.screen.debug();
+    // expect(getByRole("link").getAttribute("href")).toBe("/");
+  });
 }
