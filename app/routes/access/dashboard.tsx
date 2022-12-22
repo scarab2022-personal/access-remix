@@ -148,7 +148,7 @@ function connectionStatusString(
 export default function RouteComponent() {
   const { stats } = useLoaderData<LoaderData>();
   const poll = useFetcher<LoaderData>();
-  const [isPolling, setIsPolling] = React.useState(false);
+  const [isPolling, setIsPolling] = React.useState(true);
   const location = useLocation();
 
   React.useEffect(() => {
