@@ -38,6 +38,7 @@
 - pnpm add -D @testing-library/user-event ???
 - pnpm add -D react-router
 - pnpm add -D dotenv
+- pnpm add -D @faker-js/faker
 
 ## Github
 
