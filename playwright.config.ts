@@ -1,11 +1,12 @@
 import type { PlaywrightTestConfig } from "@playwright/test";
 import { devices } from "@playwright/test";
+import { customerStorageStatePath } from "./e2e/global-setup";
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-require('dotenv').config();
+require("dotenv").config();
 
 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
 const PORT = Number(process.env.PORT || 3000);
@@ -41,7 +42,7 @@ const config: PlaywrightTestConfig = {
   globalSetup: require.resolve("./e2e/global-setup"),
   use: {
     baseURL: `http://localhost:${PORT}`,
-    storageState: "e2e-results/storage-states/customerStorageState.json",
+    storageState: customerStorageStatePath,
     // headless: false,
 
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */

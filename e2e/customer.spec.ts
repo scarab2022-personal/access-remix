@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { customerUser } from "./global-setup";
 
 test("enter", async ({ page }) => {
   await page.goto("/");
@@ -24,7 +25,12 @@ test("navigation", async ({ page }) => {
   ).toBeVisible();
   await page
     .getByRole("navigation", { name: "Breadcrumb" })
-    .getByRole("link", { name: "Hub",exact: true })
+    .getByRole("link", { name: "Hub", exact: true })
     .click();
   await expect(page.getByRole("heading", { name: "Hub 1" })).toBeVisible();
+});
+
+test("access user", async ({ page }) => {
+  await page.goto("/access/");
+  console.log({ customerUser });
 });

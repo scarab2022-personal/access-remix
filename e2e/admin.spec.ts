@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
+import { adminStorageStatePath } from "./global-setup";
 
-test.use({ storageState: "e2e-results/storage-states/adminStorageState.json" });
+test.use({ storageState: adminStorageStatePath });
 
 test("enter", async ({ page }) => {
   await page.goto("/");
