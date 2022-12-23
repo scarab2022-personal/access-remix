@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import type { GlobalData } from "./global-setup";
 import { faker } from "@faker-js/faker";
 import { createClient } from "@supabase/supabase-js";
-import { Database } from "db_types";
+import type { Database } from "db_types";
 
 test("enter", async ({ page }) => {
   await page.goto("/");
