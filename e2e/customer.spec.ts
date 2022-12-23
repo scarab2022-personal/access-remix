@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { customerUser } from "./global-setup";
+import type { GlobalData } from "./global-setup";
 
 test("enter", async ({ page }) => {
   await page.goto("/");
@@ -31,6 +31,10 @@ test("navigation", async ({ page }) => {
 });
 
 test("access user", async ({ page }) => {
+  const globalData = JSON.parse(
+    process.env.PLAYWRIGHT_GLOBAL_DATA!
+  ) as GlobalData;
+  console.log({ globalData });
+
   await page.goto("/access/");
-  console.log({ customerUser });
 });

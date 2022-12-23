@@ -5,21 +5,28 @@ import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "db_types";
 
-export let adminUser: User;
+export type GlobalData = {
+  adminUser: User;
+  customerUser: User;
+};
+
 export const adminStorageStatePath =
   "e2e-results/storage-states/adminStorageState.json";
 
-export let customerUser: User;
 export const customerStorageStatePath =
   "e2e-results/storage-states/customerStorageState.json";
 
-export let supabase: SupabaseClient<Database>;
-
-async function saveStorageState(
-  email: string,
-  storageStatePath: string,
-  browser: Browser
-) {
+async function saveStorageState({
+  email,
+  storageStatePath,
+  browser,
+  supabase,
+}: {
+  email: string;
+  storageStatePath: string;
+  browser: Browser;
+  supabase: SupabaseClient<Database>;
+}) {
   console.log({ fn: "saveStorageState", email, storageStatePath });
 
   const { data, error } = await supabase.auth.admin.generateLink({
@@ -40,23 +47,29 @@ async function saveStorageState(
 }
 
 async function globalSetup(config: FullConfig) {
-  supabase = createClient<Database>(
+  const supabase = createClient<Database>(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
   const browser = await chromium.launch();
-  adminUser = await saveStorageState(
-    "scarab2022@gmail.com",
-    "e2e-results/storage-states/adminStorageState.json",
-    browser
-  );
-  customerUser = await saveStorageState(
-    "customer@dreadfulcompany.com",
-    "e2e-results/storage-states/customerStorageState.json",
-    browser
-  );
+  const adminUser = await saveStorageState({
+    email: "scarab2022@gmail.com",
+    storageStatePath: adminStorageStatePath,
+    browser,
+    supabase,
+  });
+  const customerUser = await saveStorageState({
+    email: "customer@dreadfulcompany.com",
+    storageStatePath: customerStorageStatePath,
+    browser,
+    supabase,
+  });
   await browser.close();
+
+  // https://playwright.dev/docs/test-advanced#global-setup-and-teardown
+  const globalData: GlobalData = { adminUser, customerUser };
+  process.env.PLAYWRIGHT_GLOBAL_DATA = JSON.stringify(globalData);
 }
 
 export default globalSetup;
