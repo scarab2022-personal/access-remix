@@ -38,6 +38,7 @@ async function saveStorageState({
   }
   const page = await browser.newPage();
   await page.goto(data.properties.action_link);
+  await page.getByRole("link", { name: "Enter" }).click();
   await page.context().storageState({
     path: storageStatePath,
   });
