@@ -34,9 +34,10 @@
 - pnpm add -D @vitejs/plugin-react
 - pnpm add -D jsdom @testing-library/react
 - pnpm add -D @testing-library/jest-dom
-- pnpm add -D @types/testing-library__jest-dom
+- pnpm add -D @types/testing-library\_\_jest-dom
 - pnpm add -D @testing-library/user-event ???
 - pnpm add -D react-router
+- pnpm add -D dotenv
 
 ## Github
 
@@ -110,9 +111,9 @@
 
 - pnpm dlx create-playwright
 - sudo -E env PATH="$PATH" pnpm playwright install-deps
-- [jest expect](https://jestjs.io/docs/expect)
 - [remix playwright vitest example](https://github.com/jacob-ebey/remix-vitest)
 - pnpm playwright test
+- pnpm playwright test --grep user customer
 - pnpm playwright show-report e2e-results/playwright-report
 
 # Welcome to Remix!
