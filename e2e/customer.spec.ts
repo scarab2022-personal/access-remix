@@ -34,7 +34,7 @@ test("access user", async ({ page }) => {
   const globalData = JSON.parse(
     process.env.PLAYWRIGHT_GLOBAL_DATA!
   ) as GlobalData;
-  console.log({ globalData });
+  // console.log({ globalData });
 
   await page.goto("/access/");
 });

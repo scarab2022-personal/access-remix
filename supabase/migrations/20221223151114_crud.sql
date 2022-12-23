@@ -3,9 +3,7 @@
 -- select * from create_access_hub_with_points (:'access_hub_name', 'This is my hub', 2, :'customer_id');
 create or replace function create_access_hub_with_points (name access_hub.name%type, description access_hub.description%type, num_points integer, customer_id auth.users.id%type)
     returns table (
-        access_hub_id access_hub.access_hub_id%type,
-        name access_hub.name%type,
-        customer_id access_hub.customer_id%type
+        access_hub_id access_hub.access_hub_id%type
     )
     as $$
     with hub as (
@@ -28,16 +26,14 @@ insert into access_point (name, position, access_hub_id)
     order by position
     returning *
 )
-select access_hub_id,
-    name,
-    customer_id
+select access_hub_id
 from hub;
 
 $$
 language sql
 security definer set search_path = public, pg_temp;
 
--- select delete_access_hub (access_hub_id, :'customer_id') from access_hub where name = :'access_hub_name';
+-- select delete_access_hub (access_hub_id, customer_id) from access_hub where name = :'access_hub_name' and customer_id = :'customer_id';
 create or replace function delete_access_hub (access_hub_id access_hub.access_hub_id%type, customer_id auth.users.id%type)
     returns table (
         access_hub_id access_hub.access_hub_id%type
@@ -47,6 +43,21 @@ create or replace function delete_access_hub (access_hub_id access_hub.access_hu
     where access_hub_id = $1
         and customer_id = $2
     returning access_hub_id;
+
+$$
+language sql
+security definer set search_path = public, pg_temp;
+
+-- select delete_access_user (access_user_id, customer_id) from access_user where name = :'access_user_name' and customer_id = :'customer_id';
+create or replace function delete_access_user (access_user_id access_user.access_user_id%type, customer_id auth.users.id%type)
+    returns table (
+        access_user_id access_user.access_user_id%type
+    )
+    as $$
+    delete from access_user
+    where access_user_id = $1
+        and customer_id = $2
+    returning access_user_id;
 
 $$
 language sql

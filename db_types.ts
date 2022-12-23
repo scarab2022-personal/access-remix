@@ -143,6 +143,15 @@ export interface Database {
         }
         Returns: { access_point_id: number; access_user_id: number }[]
       }
+      create_access_hub_with_points: {
+        Args: {
+          name: string
+          description: string
+          num_points: number
+          customer_id: string
+        }
+        Returns: { access_hub_id: number }[]
+      }
       create_access_user: {
         Args: {
           name: string
@@ -150,6 +159,14 @@ export interface Database {
           code: string
           customer_id: string
         }
+        Returns: { access_user_id: number }[]
+      }
+      delete_access_hub: {
+        Args: { access_hub_id: number; customer_id: string }
+        Returns: { access_hub_id: number }[]
+      }
+      delete_access_user: {
+        Args: { access_user_id: number; customer_id: string }
         Returns: { access_user_id: number }[]
       }
       disconnect_access_points_and_users: {
