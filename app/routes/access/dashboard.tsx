@@ -1,5 +1,5 @@
 import * as R from "remeda";
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction, SerializeFrom } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useFetcher, useLoaderData, useLocation } from "@remix-run/react";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
@@ -9,8 +9,6 @@ import { PageHeader } from "~/components/page-header";
 import { Switch } from "~/components/switch";
 import { requireAppRole } from "~/lib/utils";
 import { Badge } from "~/components/badge";
-
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
 /*
  access_hub_id │ name  │ heartbeat_at │ access_point_id │ access_point_name │ access_point_position │ grant │ deny 
@@ -108,16 +106,16 @@ async function getLoaderData({
   return { stats };
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = (async ({ request }) => {
   const { user, headers, supabaseClient } = await requireAppRole({
     request,
     appRole: "customer",
   });
   const data = await getLoaderData({ customerId: user.id, supabaseClient });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 const connectionStatusColors: {
   [Props in ReturnType<typeof connectionStatusString>]: Parameters<
@@ -130,9 +128,10 @@ const connectionStatusColors: {
 };
 
 function connectionStatusString(
-  heartbeatAt: LoaderData["stats"]["hubs"][number]["heartbeat_at"]
+  heartbeatAt: SerializeFrom<
+    typeof loader
+  >["stats"]["hubs"][number]["heartbeat_at"]
 ) {
-  // as const so infer is string literal not string in getLoaderData().
   if (heartbeatAt) {
     const deltaMs = Date.now() - new Date(heartbeatAt).getTime();
     if (deltaMs < 30 * 1000) {
@@ -146,8 +145,8 @@ function connectionStatusString(
 }
 
 export default function RouteComponent() {
-  const { stats } = useLoaderData<LoaderData>();
-  const poll = useFetcher<LoaderData>();
+  const { stats } = useLoaderData<typeof loader>();
+  const poll = useFetcher<typeof loader>();
   const [isPolling, setIsPolling] = React.useState(true);
   const location = useLocation();
 
