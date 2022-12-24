@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction, SerializeFrom } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useFetcher, useLoaderData, useLocation } from "@remix-run/react";
 import invariant from "tiny-invariant";
@@ -15,8 +15,6 @@ import type { Database } from "db_types";
 export const handle = {
   breadcrumb: "Activity",
 };
-
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
 async function getLoaderData({
   access_hub_id,
@@ -59,7 +57,7 @@ async function getLoaderData({
   };
 }
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader = (async ({ request, params }) => {
   const { user, headers, supabaseClient } = await requireAppRole({
     request,
     appRole: "customer",
@@ -75,22 +73,22 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     take: 10,
     supabaseClient,
   });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 // https://news.ycombinator.com/item?id=30376689
 export default function RouteComponent() {
-  const { accessHub, ...data } = useLoaderData<LoaderData>();
-  const [accessEvents, setAccessEvents] = useState<LoaderData["accessEvents"]>(
+  const { accessHub, ...data } = useLoaderData<typeof loader>();
+  const [accessEvents, setAccessEvents] = useState<SerializeFrom<typeof loader>["accessEvents"]>(
     data.accessEvents
   );
-  const [cursorId, setCursorId] = useState<LoaderData["cursorId"]>(
+  const [cursorId, setCursorId] = useState<SerializeFrom<typeof loader>["cursorId"]>(
     data.cursorId
   );
   // const transition = useTransition();
-  const fetcher = useFetcher<LoaderData>();
+  const fetcher = useFetcher<typeof loader>();
   const location = useLocation();
 
   useEffect(() => {

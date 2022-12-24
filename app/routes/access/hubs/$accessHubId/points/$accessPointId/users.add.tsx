@@ -14,8 +14,6 @@ export const handle = {
   breadcrumb: "Add Users",
 };
 
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
-
 async function getLoaderData({
   access_point_id,
   customer_id,
@@ -37,7 +35,7 @@ async function getLoaderData({
   return { accessUsers: data };
 }
 
-export const loader: LoaderFunction = async ({
+export const loader = (async ({
   request,
   params: { accessPointId },
 }) => {
@@ -51,10 +49,10 @@ export const loader: LoaderFunction = async ({
     customer_id: user.id,
     supabaseClient,
   });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 export const action: ActionFunction = async ({
   request,
@@ -94,7 +92,7 @@ export const action: ActionFunction = async ({
 };
 
 export default function RouteComponent() {
-  const { accessUsers } = useLoaderData<LoaderData>();
+  const { accessUsers } = useLoaderData<typeof loader>();
   return (
     <>
       <PageHeader />

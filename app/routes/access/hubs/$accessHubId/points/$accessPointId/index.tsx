@@ -20,8 +20,6 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "db_types";
 import { requireAppRole } from "~/lib/utils";
 
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
-
 /*
 ─[ RECORD 1 ]───────────┬────────
 access_point_id         │ 9
@@ -67,7 +65,7 @@ async function getLoaderData({
   return { results: data };
 }
 
-export const loader: LoaderFunction = async ({
+export const loader = (async ({
   request,
   params: { accessPointId },
 }) => {
@@ -85,13 +83,13 @@ export const loader: LoaderFunction = async ({
   if (data.results.length === 0) {
     throw new Error("Invalid access point");
   }
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 export default function RouteComponent() {
-  const { results } = useLoaderData<LoaderData>();
+  const { results } = useLoaderData<typeof loader>();
   const accessPoint = results[0];
   const navigate = useNavigate();
   const submit = useSubmit();

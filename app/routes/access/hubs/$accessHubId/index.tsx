@@ -18,8 +18,6 @@ import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { classNames, requireAppRole } from "~/lib/utils";
 
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
-
 async function getLoaderData({
   access_hub_id,
   customer_id,
@@ -41,7 +39,7 @@ async function getLoaderData({
   return { results: data };
 }
 
-export const loader: LoaderFunction = async ({
+export const loader = (async ({
   request,
   params: { accessHubId },
 }) => {
@@ -58,13 +56,13 @@ export const loader: LoaderFunction = async ({
   if (data.results.length === 0) {
     throw new Error("Invalid access hub");
   }
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 export default function RouteComponent() {
-  const { results } = useLoaderData<LoaderData>();
+  const { results } = useLoaderData<typeof loader>();
   const hubResult = results[0];
   const navigate = useNavigate();
   return (

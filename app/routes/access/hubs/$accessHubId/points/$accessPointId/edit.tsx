@@ -14,8 +14,6 @@ export const handle = {
   breadcrumb: "Edit",
 };
 
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
-
 async function getLoaderData({
   access_point_id,
   access_hub_id,
@@ -42,7 +40,7 @@ async function getLoaderData({
   return { accessPoint: data[0] };
 }
 
-export const loader: LoaderFunction = async ({
+export const loader = (async ({
   request,
   params: { accessPointId, accessHubId },
 }) => {
@@ -58,10 +56,10 @@ export const loader: LoaderFunction = async ({
     customer_id: user.id,
     supabaseClient,
   });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 const FieldValues = z
   .object({
@@ -118,7 +116,7 @@ export const action: ActionFunction = async ({
 };
 
 export default function RouteComponent() {
-  const { accessPoint } = useLoaderData<LoaderData>();
+  const { accessPoint } = useLoaderData<typeof loader>();
   const actionData = useActionData<ActionData>();
   return (
     <>

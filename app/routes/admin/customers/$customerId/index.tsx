@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction, SerializeFrom } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
@@ -8,8 +8,6 @@ import { PageHeader } from "~/components/page-header";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "db_types";
 import { requireAppRole } from "~/lib/utils";
-
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
 async function getLoaderData({
   customer_id,
@@ -52,10 +50,7 @@ async function getLoaderData({
   };
 }
 
-export const loader: LoaderFunction = async ({
-  request,
-  params: { customerId },
-}) => {
+export const loader = (async ({ request, params: { customerId } }) => {
   const { headers, supabaseClient } = await requireAppRole({
     request,
     appRole: "admin",
@@ -65,13 +60,13 @@ export const loader: LoaderFunction = async ({
     customer_id: customerId,
     supabaseClient,
   });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 function codeActivateExpireStatus(
-  accessUser: LoaderData["accessUsers"][number]
+  accessUser: SerializeFrom<typeof loader>["accessUsers"][number]
 ) {
   // JSON serializes dates as strings. The dates in LoaderData will come out as strings on the client.
   const activate_code_at = accessUser.activate_code_at
@@ -104,7 +99,7 @@ function codeActivateExpireStatus(
 }
 
 export default function RouteComponent() {
-  const { customer, accessHubs, accessUsers } = useLoaderData<LoaderData>();
+  const { customer, accessHubs, accessUsers } = useLoaderData<typeof loader>();
   return (
     <>
       <PageHeader title={customer.email} />

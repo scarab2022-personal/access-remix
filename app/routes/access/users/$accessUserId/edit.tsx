@@ -17,8 +17,6 @@ export const handle = {
   breadcrumb: "Edit",
 };
 
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
-
 async function getLoaderData({
   access_user_id,
   customer_id,
@@ -43,7 +41,7 @@ async function getLoaderData({
   return { accessUser: data[0] };
 }
 
-export const loader: LoaderFunction = async ({
+export const loader = (async ({
   request,
   params: { accessUserId },
 }) => {
@@ -57,10 +55,10 @@ export const loader: LoaderFunction = async ({
     customer_id: user.id,
     supabaseClient,
   });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 async function softDeleteAccessUser({
   access_user_id,
@@ -205,7 +203,7 @@ function formatDatetimeLocal(dt: Date) {
 }
 
 export default function RouteComponent() {
-  const { accessUser } = useLoaderData<LoaderData>();
+  const { accessUser } = useLoaderData<typeof loader>();
   const actionData = useActionData<ActionData>();
   const submit = useSubmit();
   const activateCodeAtErrors =

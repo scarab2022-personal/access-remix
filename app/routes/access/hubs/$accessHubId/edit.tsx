@@ -14,8 +14,6 @@ export const handle = {
   breadcrumb: "Edit",
 };
 
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
-
 async function getLoaderData({
   access_hub_id,
   customer_id,
@@ -40,10 +38,7 @@ async function getLoaderData({
   return { accessHub: data[0] };
 }
 
-export const loader: LoaderFunction = async ({
-  request,
-  params: { accessHubId },
-}) => {
+export const loader = (async ({ request, params: { accessHubId } }) => {
   const { user, headers, supabaseClient } = await requireAppRole({
     request,
     appRole: "customer",
@@ -54,10 +49,10 @@ export const loader: LoaderFunction = async ({
     customer_id: user.id,
     supabaseClient,
   });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 const FieldValues = z.object({
   name: z.string().min(1).max(50),
@@ -108,7 +103,7 @@ export const action: ActionFunction = async ({
 };
 
 export default function RouteComponent() {
-  const { accessHub } = useLoaderData<LoaderData>();
+  const { accessHub } = useLoaderData<typeof loader>();
   const actionData = useActionData<ActionData>();
   return (
     <>

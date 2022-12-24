@@ -13,8 +13,6 @@ export const handle = {
   breadcrumb: "Add Points",
 };
 
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
-
 async function getLoaderData({
   access_user_id,
   customer_id,
@@ -36,10 +34,7 @@ async function getLoaderData({
   return { accessPoints: data };
 }
 
-export const loader: LoaderFunction = async ({
-  request,
-  params: { accessUserId },
-}) => {
+export const loader = (async ({ request, params: { accessUserId } }) => {
   const { user, headers, supabaseClient } = await requireAppRole({
     request,
     appRole: "customer",
@@ -50,10 +45,10 @@ export const loader: LoaderFunction = async ({
     customer_id: user.id,
     supabaseClient,
   });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 export const action: ActionFunction = async ({
   request,
@@ -90,7 +85,7 @@ export const action: ActionFunction = async ({
 };
 
 export default function RouteComponent() {
-  const { accessPoints } = useLoaderData<LoaderData>();
+  const { accessPoints } = useLoaderData<typeof loader>();
   // Simple list with heading
   // https://tailwindui.com/components/application-ui/forms/checkboxes
   // <div class="mt-4 divide-y divide-gray-200 border-t border-b border-gray-200">

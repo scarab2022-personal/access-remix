@@ -7,8 +7,6 @@ import { requireAppRole } from "~/lib/utils";
 import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
-
 async function getLoaderData({
   supabaseClient,
 }: {
@@ -25,7 +23,7 @@ async function getLoaderData({
   return { customers: data };
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = (async ({ request }) => {
   const { headers, supabaseClient } = await requireAppRole({
     request,
     appRole: "admin",
@@ -33,13 +31,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   const data = await getLoaderData({
     supabaseClient,
   });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 export default function RouteComponent() {
-  const { customers } = useLoaderData<LoaderData>();
+  const { customers } = useLoaderData<typeof loader>();
   return (
     <>
       <PageHeader title="Customers" />

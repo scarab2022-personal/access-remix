@@ -9,8 +9,6 @@ import type { SupabaseClient, User } from "@supabase/supabase-js";
 import type { Database } from "db_types";
 import { requireAppRole } from "~/lib/utils";
 
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
-
 async function getLoaderData({
   customerId,
   supabaseClient,
@@ -31,19 +29,19 @@ async function getLoaderData({
   return { accessHubs: data };
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = (async ({ request }) => {
   const { user, headers, supabaseClient } = await requireAppRole({
     request,
     appRole: "customer",
   });
   const data = await getLoaderData({ customerId: user.id, supabaseClient });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 export default function RouteComponent() {
-  const { accessHubs } = useLoaderData<LoaderData>();
+  const { accessHubs } = useLoaderData<typeof loader>();
 
   // With right-justified second column
   // https://tailwindui.com/components/application-ui/lists/stacked-lists

@@ -27,12 +27,7 @@ export type ContextType = {
   session: Session | null;
 };
 
-type LoaderData = {
-  env: { SUPABASE_URL: string; SUPABASE_ANON_KEY: string };
-  initialSession: Session | null;
-};
-
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = (async ({ request }) => {
   const { SUPABASE_URL, SUPABASE_ANON_KEY } = process.env;
   if (SUPABASE_URL === undefined || SUPABASE_ANON_KEY === undefined) {
     throw new Error("SUPABASE_URL or SUPABASE_ANON_KEY env vars undefined");
@@ -50,7 +45,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     data: { session: initialSession },
   } = await supabaseClient.auth.getSession();
 
-  return json<LoaderData>(
+  return json(
     {
       initialSession,
       env: {
@@ -62,7 +57,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       headers: response.headers, // for set-cookie
     }
   );
-};
+}) satisfies LoaderFunction;
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwindStylesheetUrl }];
@@ -75,7 +70,7 @@ export const meta: MetaFunction = () => ({
 });
 
 export default function App() {
-  const { env, initialSession } = useLoaderData<LoaderData>();
+  const { env, initialSession } = useLoaderData<typeof loader>();
   const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
   const [session, setSession] = useState<Session | null>(initialSession);
   const context: ContextType = { supabase, session };
@@ -97,6 +92,7 @@ export default function App() {
         subscription.unsubscribe();
       };
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

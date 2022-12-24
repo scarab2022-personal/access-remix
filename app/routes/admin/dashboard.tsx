@@ -10,8 +10,6 @@ export const handle = {
   breadcrumb: "Dashboard",
 };
 
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
-
 async function getLoaderData({
   supabaseClient,
 }: {
@@ -31,19 +29,19 @@ async function getLoaderData({
   return { stats: data[0] };
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = (async ({ request }) => {
   const { headers, supabaseClient } = await requireAppRole({
     request,
     appRole: "admin",
   });
   const data = await getLoaderData({ supabaseClient });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
 export default function RouteComponent() {
-  const { stats } = useLoaderData<LoaderData>();
+  const { stats } = useLoaderData<typeof loader>();
   const cards: { name: string; key: keyof typeof stats }[] = [
     { name: "Customers", key: "customer" },
     { name: "Access Hubs", key: "access_hub" },

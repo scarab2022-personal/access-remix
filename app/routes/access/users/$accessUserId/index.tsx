@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction, SerializeFrom } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
   useLoaderData,
@@ -16,8 +16,6 @@ import { DescriptionList } from "~/components/description-list";
 import { requireAppRole } from "~/lib/utils";
 import type { Database } from "db_types";
 import type { SupabaseClient } from "@supabase/supabase-js";
-
-type LoaderData = Awaited<ReturnType<typeof getLoaderData>>;
 
 /*
  access_user_id │  name  │ description │ code │ activate_code_at │ expire_code_at │ access_point_id │ access_point_name │ access_hub_name 
@@ -52,10 +50,7 @@ async function getLoaderData({
   return { results: data };
 }
 
-export const loader: LoaderFunction = async ({
-  request,
-  params: { accessUserId },
-}) => {
+export const loader = (async ({ request, params: { accessUserId } }) => {
   const { user, headers, supabaseClient } = await requireAppRole({
     request,
     appRole: "customer",
@@ -66,12 +61,14 @@ export const loader: LoaderFunction = async ({
     customer_id: user.id,
     supabaseClient,
   });
-  return json<LoaderData>(data, {
+  return json(data, {
     headers, // for set-cookie
   });
-};
+}) satisfies LoaderFunction;
 
-function codeActivateExpireStatus(accessUser: LoaderData["results"][number]) {
+function codeActivateExpireStatus(
+  accessUser: SerializeFrom<typeof loader>["results"][number]
+) {
   // JSON serializes dates as strings. The dates in LoaderData will come out as strings on the client.
   const activate_code_at = accessUser.activate_code_at
     ? new Date(accessUser.activate_code_at)
@@ -106,7 +103,7 @@ export default function RouteComponent() {
   const navigate = useNavigate();
   const submit = useSubmit();
   const removeFormActionBase = useFormAction("points");
-  const { results } = useLoaderData<LoaderData>();
+  const { results } = useLoaderData<typeof loader>();
   const accessUserResult = results[0];
   const { codeStatus, activateExpireStatus } =
     codeActivateExpireStatus(accessUserResult);
