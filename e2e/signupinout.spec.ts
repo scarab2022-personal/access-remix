@@ -1,4 +1,5 @@
-import { test, expect, Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 // https://github.com/microsoft/playwright/issues/15977
 test.use({ storageState: { cookies: [], origins: [] } });
