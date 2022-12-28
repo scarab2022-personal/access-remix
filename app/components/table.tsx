@@ -15,7 +15,7 @@ function Table({
   headers,
   children,
 }: {
-  headers: React.ReactFragment;
+  headers: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
